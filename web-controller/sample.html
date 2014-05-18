@@ -61,45 +61,82 @@
 
 
 <div class="container">
-
+<br/>
     <!-- Main component for a primary marketing message or call to action -->
-    <div class="jumbotron">
-        <p>
-        <h1>Register your Device</h1>
-you can add your device by filling these essentials to get our sevices
-        </p>
+    <div class="row">
+        <div class="col-sm-7 col-sm-offset-0">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+      <img src="images/img1.jpg">
+    </div>
+        <div class="item">
+      <img src="images/img2.jpg">
+    </div>
+          <div class="item">
+      <img src="images/img3.jpg">
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+            
+            
+        </div>
+        <div class="col-sm-5 col-sm-offset-0">
+            <div class="jumbotron">
+                <h2>Welcome to DIA</h2>
         <form>
-		</div>
-            <div class="col-sm-6 col-sm-offset-5">
+            <div class="row">
+                <br/>
+<!--                <div class="col-sm-5 col-sm-offset-1"> Garden Name</div>-->
+                <div class="col-sm-12">               
                 <input type="text" class="form-control input-lg col-sm-4"
-                       placeholder="Enter your MAC NO of Arduino here">
+                       placeholder="Enter your garden name here">
             </div>
-            <div class="col-sm-6 col-sm-offset-5" style="margin-top:1%">
+            </div> 
+            <br/>
+            <div class="row">
+<!--                <div class="col-sm-5 col-sm-offset-1"> Password</div>-->
+            <div class="col-sm-12 " style="margin-top:1%">
                 <input type="text" class="form-control input-lg col-sm-4"
-                       placeholder="Enter your MSISDNO(sim card no) here">
-	            </div>
-				
-
-					    <div class="form-group">
-    <div class="col-sm-offset-5 col-sm-10">
-      <div class="checkbox">
-        <label>
-          <input type="checkbox"> Remember me
-        </label>
-      
-	  </div>
-
-          
-                <div class="col-sm-4 col-sm-offset-1">
-                    <button style="margin:10%" type="submit" class="btn btn-lg btn-success col-sm-12">Add</button>
+                       placeholder="Enter your password here">
+            </div>
+<br/>
+            <div class="jumbotron">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <button style="margin:5%" type="submit" class="btn btn-lg btn-success col-sm-12"><a href="gardenhome.html">Sign in</a></button>
+                
+                
                 </div>
-            </div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <div class="row">
+                If you don't have an account please click <a href="createGarden.html.html">here</a>
+                </div>
+                </div>
         </form>
     </div>
-
+        </div>
 </div>
 <!-- /container -->
-
+<a href="index.html"></a>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery-1.11.0.min.js"></script>
@@ -107,5 +144,4 @@ you can add your device by filling these essentials to get our sevices
 <script src="resources/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
 </body>
 </html>
-
 
