@@ -8,12 +8,10 @@
 *.ipr
 *.iws
 .idea/
-*.idea/
 
 #Build targets
-/target
-*/target
-*/target
+target/
+
 
 #Linux unsaved files
 *~
