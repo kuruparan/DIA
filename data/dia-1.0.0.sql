@@ -12,10 +12,10 @@ USE `dia` ;
 DROP TABLE IF EXISTS `dia`.`garden` ;
 
 CREATE TABLE IF NOT EXISTS `dia`.`garden` (
-  `idgarden` INT NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `garden_name` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idgarden`))
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
@@ -29,13 +29,13 @@ CREATE TABLE IF NOT EXISTS `dia`.`device` (
   `device_name` VARCHAR(45) NOT NULL,
   `pin` VARCHAR(45) NOT NULL,
   `device_mask` VARCHAR(45) NOT NULL,
-  `garden_idgarden` INT NULL,
+  `garden_id` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `device_name_UNIQUE` (`device_name` ASC),
-  INDEX `fk_device_garden1_idx` (`garden_idgarden` ASC),
+  INDEX `fk_device_garden1_idx` (`garden_id` ASC),
   CONSTRAINT `fk_device_garden1`
-    FOREIGN KEY (`garden_idgarden`)
-    REFERENCES `dia`.`garden` (`idgarden`)
+    FOREIGN KEY (`garden_id`)
+    REFERENCES `dia`.`garden` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

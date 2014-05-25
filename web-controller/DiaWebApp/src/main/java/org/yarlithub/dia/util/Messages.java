@@ -45,7 +45,7 @@ public final class Messages{
         catch (MissingResourceException e)
         {
             LOGGER.log(Level.ALL, "Message key not found: " + key);
-            return '!' + key + '!';
+            return "Sorry, internal error occurred, please exit and retry. \n\n000 Exit";
         }
     }
 

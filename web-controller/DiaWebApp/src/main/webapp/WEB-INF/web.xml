@@ -25,6 +25,10 @@
         <servlet-name>moUssdReceiver</servlet-name>
         <url-pattern>/dlg-ussd-receiver</url-pattern>
     </servlet-mapping>
+
+
+
+
     <servlet-mapping>
         <servlet-name>mvc-dispatcher</servlet-name>
         <url-pattern>/</url-pattern>

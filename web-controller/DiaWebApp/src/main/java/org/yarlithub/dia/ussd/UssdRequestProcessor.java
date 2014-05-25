@@ -6,6 +6,8 @@ import hms.kite.samples.api.ussd.UssdRequestSender;
 import hms.kite.samples.api.ussd.messages.MoUssdReq;
 import hms.kite.samples.api.ussd.messages.MtUssdReq;
 import hms.kite.samples.api.ussd.messages.MtUssdResp;
+import org.yarlithub.dia.repo.DBExecutor;
+import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.util.Messages;
 
 import java.util.ArrayList;
@@ -21,7 +23,6 @@ import java.util.logging.Logger;
 public class UssdRequestProcessor {
 
     private final static Logger LOGGER = Logger.getLogger(UssdHandler.class.getName());
-
     // hardcoded values
     private static final String EXIT_SERVICE_CODE = "000";
     private static final String BACK_SERVICE_CODE = "999";
@@ -29,12 +30,11 @@ public class UssdRequestProcessor {
     private static final String USSD_OP_MO_INIT = "mo-init";
     private static final String USSD_OP_MT_CONT = "mt-cont";
     private static final String USSD_OP_MT_FIN = "mt-fin";
-
     // menu state saving for back button
     private List<String> menuState = new ArrayList<>();
-
     // service to send the request
     private UssdRequestSender ussdMtSender;
+    private Device device;
 
     public UssdRequestProcessor(UssdRequestSender ussdMtSender) {
         this.ussdMtSender = ussdMtSender;
@@ -47,11 +47,11 @@ public class UssdRequestProcessor {
      */
     public void processRequest(final MoUssdReq moUssdReq) throws SdpException {
 
-        LOGGER.log(Level.INFO, "**************menuState array is now: "+menuState.toString());
+        LOGGER.log(Level.INFO, "menuState array is now: " + menuState.toString());
 
         // exit request - session destroy
         if (moUssdReq.getMessage().equals(EXIT_SERVICE_CODE)) {
-            terminateSession(moUssdReq);
+            createAndSendRequest(moUssdReq, "", USSD_OP_MT_FIN);
             return;// completed work and return
         }
 
@@ -62,18 +62,108 @@ public class UssdRequestProcessor {
         }
 
         // get current service code
-        String serviceCode;
+        String serviceCode = "";
+        int WrongPinCount = 0;
         if (USSD_OP_MO_INIT.equals(moUssdReq.getUssdOperation())) {
-            serviceCode = "0";
+            serviceCode = "1";
             clearMenuState();
+            //first database check whether the requesting sim is device or user
+            device = DBExecutor.getDeviceByMask(moUssdReq.getSourceAddress());
+            if (device.getId() > 0) {
+                serviceCode = "2";
+            }
+//            if (DBExecutor.isDevice()) {
+//                serviceCode = "3";
+//            }
         } else {
-            serviceCode = getServiceCode(moUssdReq);
-            LOGGER.log(Level.INFO, "**************MoUssdRequest message: "+moUssdReq.getMessage());
-            LOGGER.log(Level.INFO, "**************Service code: "+serviceCode);
+            Boolean serviceCodeChanged = false;
+            int currentMenuSize = menuState.size();
+            String lastMenuState = menuState.get(menuState.size() - 1);
+            if (currentMenuSize > 0 && lastMenuState.equals("1") && moUssdReq.getMessage().equals("1")) {
+                //User is asking for configure as New Device, Generate new device id based on database.
+                int newDeviceReservedId = DBExecutor.reserveNewDevice();
+                device = new Device();
+                device.setId(newDeviceReservedId);
+                device.setDevice_name("DIA" + String.valueOf(newDeviceReservedId));
+            } else if (currentMenuSize > 0 && lastMenuState.equals("11")) {
+                //User is entering a new pin for device.
+                device.setPin(moUssdReq.getMessage());
+                //message is user text so have to update service code manually
+                serviceCode = "111";
+                serviceCodeChanged = true;
+            } else if (currentMenuSize > 0 && lastMenuState.equals("111")) {
+                //User is entering pin again for confirmation for device.
+                if (device.getPin().equals(moUssdReq.getMessage())) {
+                    int results = DBExecutor.updateNewDevice(device);
+                    //terminate session by sending USSD_OP_MT_FIN
+                    if (results == 1) {
+                        createAndSendRequest(moUssdReq, buildMenuContent("1111"), USSD_OP_MT_FIN);
+                    } else {
+                        createAndSendRequest(moUssdReq, buildMenuContent("0"), USSD_OP_MT_FIN);
+                    }
+
+                    return;
+                } else {
+                    //entered pins does not match
+                    //special case: redirect to state 11 again <= remove menuState
+                    createAndSendRequest(moUssdReq, buildMenuContent("1112"), USSD_OP_MT_CONT);
+
+                    menuState.remove(menuState.size() - 1);
+                    return;
+                }
+
+            } else if (currentMenuSize > 0 && lastMenuState.equals("12")) {
+                //User is entering device id he want to connect
+                device = DBExecutor.getDeviceByName(moUssdReq.getMessage());
+                if (device.getId() > 0) {
+                    //message is user text so have to update service code manually
+                    serviceCode = "121";
+                    serviceCodeChanged = true;
+                } else {
+                    //to display no such device
+                    device.setDevice_name(moUssdReq.getMessage());
+                    //no such device
+                    //special case: redirect to state 12 again <= do not add menuState.
+                    createAndSendRequest(moUssdReq, buildMenuContent("122"), USSD_OP_MT_CONT);
+                    return;
+                }
+
+            } else if (currentMenuSize > 0 && lastMenuState.equals("121")) {
+                //User is entering device pin he want to connect
+                if (device.getPin().equals(moUssdReq.getMessage())) {
+                    int results = DBExecutor.insertDeviceAccess(device.getId(), moUssdReq.getSourceAddress());
+                    //terminate session by sending USSD_OP_MT_FIN
+                    if (results == 1) {
+                        createAndSendRequest(moUssdReq, buildMenuContent("1211"), USSD_OP_MT_FIN);
+                    } else {
+                        createAndSendRequest(moUssdReq, buildMenuContent("0"), USSD_OP_MT_FIN);
+                    }
+
+                    return;
+                } else {
+                    //Wrong pin
+                    //special case: redirect to state 121 again <= do not add menuState.
+                    if (WrongPinCount <= 3) {
+                        createAndSendRequest(moUssdReq, buildMenuContent("1212"), USSD_OP_MT_CONT);
+
+                        return;
+                    } else {
+                        createAndSendRequest(moUssdReq, buildMenuContent("1213"), USSD_OP_MT_FIN);
+                        return;
+                    }
+                }
+
+            }
+            if (!serviceCodeChanged) {
+                serviceCode = getServiceCode(moUssdReq);
+            }
+
+            LOGGER.log(Level.INFO, "MoUssdRequest message: " + moUssdReq.getMessage());
+            LOGGER.log(Level.INFO, "Service code: " + serviceCode);
         }
         // create request to display user
-        final MtUssdReq request = createRequest(moUssdReq, serviceCode, USSD_OP_MT_CONT);
-        sendRequest(request);
+        createAndSendRequest(moUssdReq, buildMenuContent(serviceCode), USSD_OP_MT_CONT);
+
         // record menu state
         menuState.add(serviceCode);
     }
@@ -86,7 +176,7 @@ public class UssdRequestProcessor {
      * @param ussdOperation - operation
      * @return MtUssdReq - filled request object
      */
-    private MtUssdReq createRequest(final MoUssdReq moUssdReq, final String menuContent, final String ussdOperation) {
+    private MtUssdResp createAndSendRequest(final MoUssdReq moUssdReq, final String menuContent, final String ussdOperation) throws SdpException {
         final MtUssdReq request = new MtUssdReq();
         request.setApplicationId(moUssdReq.getApplicationId());
         request.setEncoding(moUssdReq.getEncoding());
@@ -96,31 +186,7 @@ public class UssdRequestProcessor {
         request.setUssdOperation(Messages.getMessage("operation"));
         request.setVersion(moUssdReq.getVersion());
         request.setDestinationAddress(moUssdReq.getSourceAddress());
-        return request;
-    }
 
-    /**
-     * load a property from ussdmenu.properties
-     *
-     * @param key Key
-     * @return value
-     */
-    private String getText(final String key) {
-        return getPropertyValue(PROPERTY_KEY_PREFIX + key);
-    }
-
-    private String getPropertyValue(final String key) {
-        //return key;
-        return Messages.getMessage(key);
-    }
-
-    /**
-     * Request sender
-     *
-     * @param request
-     * @return MtUssdResp
-     */
-    private MtUssdResp sendRequest(final MtUssdReq request) throws SdpException {
         // sending request to service
         MtUssdResp response = null;
         try {
@@ -142,22 +208,26 @@ public class UssdRequestProcessor {
     }
 
     /**
+     * load a property from ussdmenu.properties
+     *
+     * @param key Key
+     * @return value
+     */
+    private String getText(final String key) {
+        return getPropertyValue(PROPERTY_KEY_PREFIX + key);
+    }
+
+    private String getPropertyValue(final String key) {
+        //return key;
+        return Messages.getMessage(key);
+    }
+
+    /**
      * Clear history list
      */
     private void clearMenuState() {
         LOGGER.info("clear history List");
         menuState.clear();
-    }
-
-    /**
-     * Terminate session
-     *
-     * @param moUssdReq MO Ussd request.
-     * @throws hms.kite.samples.api.SdpException
-     */
-    private void terminateSession(final MoUssdReq moUssdReq) throws SdpException {
-        final MtUssdReq request = createRequest(moUssdReq, "", USSD_OP_MT_FIN);
-        sendRequest(request);
     }
 
     /**
@@ -176,8 +246,8 @@ public class UssdRequestProcessor {
         }
 
         // create request and send
-        final MtUssdReq request = createRequest(moUssdReq, buildMenuContent(lastMenuVisited), USSD_OP_MT_CONT);
-        sendRequest(request);
+        createAndSendRequest(moUssdReq, buildMenuContent(lastMenuVisited), USSD_OP_MT_CONT);
+
 
         // clear menu status
         if (lastMenuVisited.equals("0")) {
@@ -203,9 +273,11 @@ public class UssdRequestProcessor {
         }
 
         // create service codes for child menus based on the main menu codes
-        if (menuState.size() > 0 && !menuState.get(menuState.size() - 1).equals("0")) {
+
+        if (menuState.size() > 0) {
             String generatedChildServiceCode = "" + menuState.get(menuState.size() - 1) + serviceCode;
             serviceCode = generatedChildServiceCode;
+            LOGGER.info("generatedChildServiceCode is: " + generatedChildServiceCode);
         }
 
         return serviceCode;
@@ -218,15 +290,16 @@ public class UssdRequestProcessor {
      * @return menuContent
      */
     private String buildMenuContent(final String selection) {
-        String menuContent;
+        String menuContent = "something went wrong!, please retry";
         try {
             // build menu contents
             menuContent = getText(selection);
+            menuContent = String.format(menuContent, device.getDevice_name());
+
         } catch (MissingResourceException e) {
             // back to main menu
-            menuContent = getText("0");
+//            menuContent = getText("1");not possible to handle in our case
         }
         return menuContent;
     }
-
 }

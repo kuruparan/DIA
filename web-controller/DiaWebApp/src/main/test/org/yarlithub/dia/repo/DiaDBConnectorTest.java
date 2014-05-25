@@ -9,11 +9,11 @@ import static junit.framework.Assert.assertNotNull;
  * Project YIT DIA
  * Created by jaykrish on 5/25/14.
  */
-public class ConnectorTest {
+public class DiaDBConnectorTest {
 
     @Test
     public void testConnection() {
-        assertNotNull(Connector.getConnection("", "", ""));
+        assertNotNull(DiaDBConnector.getConnection("", "", ""));
     }
 
 }
