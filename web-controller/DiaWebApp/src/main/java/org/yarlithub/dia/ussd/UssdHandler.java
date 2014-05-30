@@ -9,7 +9,7 @@ import hms.kite.samples.api.SdpException;
 import hms.kite.samples.api.ussd.MoUssdListener;
 import hms.kite.samples.api.ussd.UssdRequestSender;
 import hms.kite.samples.api.ussd.messages.MoUssdReq;
-import org.yarlithub.dia.util.Messages;
+import org.yarlithub.dia.util.Property;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,7 +35,7 @@ public class UssdHandler implements MoUssdListener {
         // create and initialize service
         try {
             LOGGER.log(Level.INFO, "Initiating UssdHandler....");
-            ussdMtSender = new UssdRequestSender(new URL(Messages.getMessage("sdp.server.url")));
+            ussdMtSender = new UssdRequestSender(new URL(Property.getValue("sdp.ussd.url")));
         } catch (MalformedURLException e) {
             LOGGER.log(Level.SEVERE, "Unexpected error occurred", e);
         }

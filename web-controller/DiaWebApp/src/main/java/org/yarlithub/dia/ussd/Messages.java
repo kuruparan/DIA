@@ -3,7 +3,7 @@
  * Created by jaykrish on 5/23/14.
  */
 
-package org.yarlithub.dia.util;
+package org.yarlithub.dia.ussd;
 
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 public final class Messages{
     private static final Logger LOGGER = Logger.getLogger(Messages.class.getName());
 
-    public static final String BUNDLE_NAME = "org.yarlithub.dia.ussd.resources.ussdmenu"; //$NON-NLS-1$
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE_NAME);
+    public static final String USSD_BUNDLE_NAME = "org.yarlithub.dia.ussd.ussdmenu"; //$NON-NLS-1$
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle(USSD_BUNDLE_NAME);
 
 
     private Messages()

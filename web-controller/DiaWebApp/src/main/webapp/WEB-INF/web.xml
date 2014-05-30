@@ -14,6 +14,14 @@
         </init-param>
     </servlet>
     <servlet>
+        <servlet-name>moSmsReceiver</servlet-name>
+        <servlet-class>hms.kite.samples.api.sms.MoSmsReceiver</servlet-class>
+        <init-param>
+            <param-name>smsReceiver</param-name>
+            <param-value>org.yarlithub.dia.sms.SmsHandler</param-value>
+        </init-param>
+    </servlet>
+    <servlet>
         <servlet-name>mvc-dispatcher</servlet-name>
         <servlet-class>
             org.springframework.web.servlet.DispatcherServlet
@@ -24,6 +32,10 @@
     <servlet-mapping>
         <servlet-name>moUssdReceiver</servlet-name>
         <url-pattern>/dlg-ussd-receiver</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>moSmsReceiver</servlet-name>
+        <url-pattern>/dlg-mo-receiver</url-pattern>
     </servlet-mapping>
 
 
