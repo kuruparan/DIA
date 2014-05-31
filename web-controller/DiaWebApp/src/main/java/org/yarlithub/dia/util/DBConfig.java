@@ -7,5 +7,5 @@ package org.yarlithub.dia.util;
 public class DBConfig {
     public static final String mySqlUrl = "jdbc:mysql://localhost:3306/dia";
     public static final String mySqlUserName = "root";
-    public static final String mySqlPassword = "";
+    public static final String mySqlPassword = "root";
 }
