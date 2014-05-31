@@ -4,10 +4,10 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
         <meta charset="utf-8">
-        <title>Get Started</title>
+        <title>Our Achievements</title>
         <meta name="generator" content="Bootply" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
         
         <!--[if lt IE 9]>
           <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -16,6 +16,13 @@
         <link rel="apple-touch-icon" href="/bootstrap/img/apple-touch-icon.png">
         <link rel="apple-touch-icon" sizes="72x72" href="/bootstrap/img/apple-touch-icon-72x72.png">
         <link rel="apple-touch-icon" sizes="114x114" href="/bootstrap/img/apple-touch-icon-114x114.png">
+
+
+
+
+
+
+
 
 
 
@@ -163,7 +170,7 @@ body {
     
     <body  >
         
-      <div class="navbar-wrapper">
+        <div class="navbar-wrapper">
     <div class="container target">
         <div class="navbar navbar-inverse navbar-static-top">
             <div class="navbar-header"> <a class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -193,136 +200,16 @@ body {
         </div>
     </div>
     <!-- /container -->
-
+</div>
 <!-- /navbar wrapper -->
 
 
 
-<div class="panel-group col-sm-10 col-sm-offset-1" id="accordion">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-          What is DIA.
-        </a>
-      </h4>
-    </div>
-    <div id="collapseOne" class="panel-collapse collapse in">
-      <div class="panel-body">
-        DIA (Digital Irrigation Automation) is project started with Yarl it Hub with a mission of Automate irrigation system. This project is 
-        To develop the irrigation system to save water to the next generation. Water is an important source for life and now it’s becoming polluted and 
-        Unavailable. This means in few years’ water could be a difficult thing to get. Is south Asian countries irrigations is an open irrigation, so the 
-        Percentage of water wastage is high. Our aim is to reduce the wastage of water in irrigation. We introduce weather forecast for the irrigation. If 
-        It could be rain today so we don’t need to irrigate. We also introduce moisture sensors to find out water level on the land so it will tell you if the 
-        Plant need water or it will warn you there are too much water.
 
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-          What are the requirements.
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse">
-      <div class="panel-body">
-      This project is mainly base on Telco platform. So the data communication is based on SMS. So the user and the device have to connect with a Telco platform. Device should have a sim-card. Before inserting the sim card you have to configure it as a device. To that please see configure the device. After configure it as a device you can put it into the device. That’s all for the configuration of the device.
-Then in your mobile which you going to use as a controller call *771*100# after flowing the instructions you will get the conformation message that your sim was set as controller. Then it’s over. 
-Now you can control you home garden or your field irrigation system by just call *771*100# in your mobile phone.
-<img src="images/img_gsm.jpg" class="img-responsive" alt="Responsive image">
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-          Configuration
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse">
-      <div class="panel-body">
-      
-          <b>The application will be launched in live 28th Wednesday night </b><br/><br/>
-
-User  to Server: all sms should be sent to 77100<br/><br/>
-
-Subscribe: <b>REG da</b> <br/>
-UnSubscribe: <b>UNREG da</b> <br/><br/>
-
-configure(USSD) : <b>*771*100#</b><br/><br/>
-
-on: <b>da on</b><br/>
-off: <b>da off</b><br/><br/>
-
-if more than one devices configured<br/><br/>
-on:<b> da on devicename</b><br/>
-off: <b>da off devicename</b><br/><br/>
-
-schedule: <b>da 1110101:4.00-6.00:12.30-1.00:17.00-19.45  [devicename]</b><br/>
-<b>We recommend you to schedule using web interface :)</b><br/>
-The message schedules per week first 7 bits says from Monday to Sunday which days the schedule should work and not by indicating 0 and 1. after that :  separated on-off times in 24Hrs, device name is optional if user is controlling more than one device
-<br/><br/>
-<b>modes of operation</b><br/><br/>
-
-1. Default mode:<b> da mod d</b> <br/>
-Device just follow the schedule and commands <br/>
-2. Alert mode: <b>da mod a</b><br/>
-Device just follow the schedule and commands and 
-sends alerts+suggestions about the environment on critical situations.<br/>
-3. Intelligent mode: <b>da mod i</b><br/>
- 	Device uses sensors and decide how to water the plant efficiently, 
-only ask the user if can’t make decision.<br/><br/>
-
-<b>Reporting</b><br/>
-
-1. Default: <b>da rep all</b> <br/>Send status sms whenevers a command/intelligent action executed.<br/>
-2. Summary: <b>da rep day </b>          send a summary sms per day
-           <b>da rep week</b>          send a summary sms per week<br/>
-3. No reports: <b>da rep off</b>  No status sms send back.<br/>
+        <script type='text/javascript' src="js/vendor/jquery-1.11.0.js"></script>
 
 
-
-
-
-
-
-
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-        <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-
-
-        <script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-
-
-
+        <script type='text/javascript' src="js/vendor/bootstrap.min.js"></script>
 
 
 
