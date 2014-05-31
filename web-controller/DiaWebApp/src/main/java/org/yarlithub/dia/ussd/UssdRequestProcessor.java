@@ -11,7 +11,6 @@ import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.repo.object.DeviceAccess;
 import org.yarlithub.dia.util.Property;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -75,7 +74,7 @@ public class UssdRequestProcessor {
             if (device.getId() > 0) {
                 serviceCode = "2";
             }
-            deviceAccess = DataLayer.getDeviceAccessbyMask(moUssdReq.getSourceAddress());
+            deviceAccess = DataLayer.getDeviceAccessByMask(moUssdReq.getSourceAddress());
             if (deviceAccess.getId()>0) {
                 device= DataLayer.getDeviceById(deviceAccess.getDevice_id());
                 serviceCode = "3";

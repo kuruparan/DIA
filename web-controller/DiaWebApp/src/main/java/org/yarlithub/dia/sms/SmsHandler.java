@@ -99,7 +99,7 @@ public class SmsHandler implements MoSmsListener {
 
         mtSmsReq.setMessage(moSmsReq.getMessage());
         List<String> addressList = new ArrayList<String>();
-        DeviceAccess deviceAccess = DataLayer.getDeviceAccessbyMask(moSmsReq.getSourceAddress());
+        DeviceAccess deviceAccess = DataLayer.getDeviceAccessByMask(moSmsReq.getSourceAddress());
         LOGGER.info("Device access check : deviceId " + deviceAccess.getDevice_id());
         if (deviceAccess.getId() > 0) {
             device = DataLayer.getDeviceById(deviceAccess.getDevice_id());

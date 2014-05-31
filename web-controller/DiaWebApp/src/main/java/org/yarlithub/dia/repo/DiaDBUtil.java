@@ -3,10 +3,13 @@ package org.yarlithub.dia.repo;
 import com.mysql.jdbc.Connection;
 import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.repo.object.DeviceAccess;
+import org.yarlithub.dia.repo.object.Garden;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +21,7 @@ public class DiaDBUtil {
     private static final Logger LOGGER = Logger.getLogger(DiaDBUtil.class.getName());
 
     /**
-     * Create Device instance by device resultSet from current index.
+     * Create Device instance by device resultSet on current index.
      *
      * @param sql SQL String
      * @return device with positive id if successful, or id 0.
@@ -45,10 +48,39 @@ public class DiaDBUtil {
     }
 
     /**
-     * Create Device instance by device resultSet from current index.
+     * Create List of Device instance by device resultSet.
      *
      * @param sql SQL String
-     * @return device with positive id if successful, or id 0.
+     * @return List of Device with positive id if successful, or id 0.
+     */
+    public static List<Device> getDeviceList(String sql) {
+
+        List<Device> deviceList = new ArrayList<Device>();
+        try {
+            Connection con = DiaDBConnector.getConnection();
+            ResultSet resultSet = sqlQuery(con, sql);
+            if (resultSet.next()) {
+                Device device = new Device();
+                device.setId(resultSet.getInt("id"));
+                device.setDevice_name(resultSet.getString("device_name"));
+                device.setPin(resultSet.getString("pin"));
+                device.setDevice_mask(resultSet.getString("device_mask"));
+                device.setGarden_id(resultSet.getInt("garden_id"));
+                deviceList.add(device);
+            }
+            resultSet.close();
+            con.close();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "SQLException: " + e);
+        }
+        return deviceList;
+    }
+
+    /**
+     * Create DeviceAccess instance by device resultSet on current index.
+     *
+     * @param sql SQL String
+     * @return DeviceAccess with positive id if successful, or id 0.
      */
     public static DeviceAccess getDeviceAccess(String sql) {
 
@@ -68,6 +100,31 @@ public class DiaDBUtil {
             LOGGER.log(Level.SEVERE, "SQLException: " + e);
         }
         return deviceAccess;
+    }
+
+    /**
+     * Create Garden instance by device resultSet on current index.
+     *
+     * @param sql SQL String
+     * @return Garden with positive id if successful, or id 0.
+     */
+    public static Garden getGarden(String sql) {
+
+        Garden garden= new Garden();
+        try {
+            Connection con = DiaDBConnector.getConnection();
+            ResultSet resultSet = sqlQuery(con, sql);
+            if (resultSet.next()) {
+                garden.setId(resultSet.getInt("id"));
+                garden.setGarden_name(resultSet.getString("garden_name"));
+                garden.setPassword(resultSet.getString("password"));
+            }
+            resultSet.close();
+            con.close();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "SQLException: " + e);
+        }
+        return garden;
     }
 
     /**

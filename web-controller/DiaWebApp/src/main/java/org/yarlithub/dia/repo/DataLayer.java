@@ -3,9 +3,11 @@ package org.yarlithub.dia.repo;
 import com.mysql.jdbc.Connection;
 import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.repo.object.DeviceAccess;
+import org.yarlithub.dia.repo.object.Garden;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,10 +33,20 @@ public class DataLayer {
         return DiaDBUtil.getDevice(sql);
     }
 
-
-    public static DeviceAccess getDeviceAccessbyMask(String user_mask) {
+    public static DeviceAccess getDeviceAccessByMask(String user_mask) {
         String sql = String.format("SELECT * FROM device_access WHERE user_mask=\"%s\"", user_mask);
         return DiaDBUtil.getDeviceAccess(sql);
+    }
+
+    public static Garden getGardenByName(String garden_name) {
+        String sql = String.format("SELECT * FROM garden WHERE garden_name=\"%s\"", garden_name);
+        return DiaDBUtil.getGarden(sql);
+    }
+
+
+    public static List<Device> getDevicesByGardenId(int gardenId) {
+        String sql = String.format("SELECT * FROM device where garden_id=\"%s\"", gardenId);
+        return DiaDBUtil.getDeviceList(sql);
     }
 
     public static boolean isUser() {
@@ -73,13 +85,26 @@ public class DataLayer {
         int result = 0;
         Connection con = DiaDBConnector.getConnection();
         String sql = String.format("UPDATE device "
-                + "SET device_name = \"%s\", pin = \"%s\", device_mask = \"%s\" "
+                + "SET device_name = \"%s\", pin = \"%s\", device_mask = \"%s\", garden_id = \"%s\" "
                 + "WHERE id = \"%s\""
-                , device.getDevice_name(), device.getPin(), device.getDevice_mask(), String.valueOf(device.getId()));
+                , device.getDevice_name(), device.getPin(), device.getDevice_mask(), device.getGarden_id(), String.valueOf(device.getId()));
 
         try {
             result = DiaDBUtil.sqlUpdate(con, sql);
             con.close();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "SQLException: " + e);
+        }
+        return result;
+    }
+
+    public static int addNewGarden(Garden garden) {
+        int result = 0;
+        Connection con = DiaDBConnector.getConnection();
+        String sql = String.format("INSERT INTO garden (garden_name, password)VALUES (\"%s\",\"%s\")"
+                , garden.getGarden_name(), garden.getPassword());
+        try {
+            result = DiaDBUtil.sqlUpdate(con, sql);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "SQLException: " + e);
         }
@@ -98,4 +123,5 @@ public class DataLayer {
         }
         return result;
     }
+
 }
