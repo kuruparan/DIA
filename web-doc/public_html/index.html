@@ -4,10 +4,10 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
         <meta charset="utf-8">
-        <title>About us</title>
+        <title>Welcome to DIA</title>
         <meta name="generator" content="Bootply" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap.css" rel="stylesheet">
         
         <!--[if lt IE 9]>
           <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -66,14 +66,14 @@ body {
 
 /* Declare heights because of positioning of img element */
 .carousel .item {
-  height: 400px;
+  height: 600px;
   background-color:#555;
 }
 .carousel img {
   position: absolute;
   top: 0;
   left: 0;
-  min-height: 400px;
+  min-height: 600px;
 }
 
 
@@ -178,7 +178,7 @@ body {
 	      <span class="icon-bar"></span>
 	      <span class="icon-bar"></span>
 	    </a>
-            <a class="navbar-brand" href="index.html">Welcome to DIA</a>
+ <a class="navbar-brand" href="index.html">Welcome to DIA</a>
 
             </div>
             <div class="navbar-collapse collapse">
@@ -207,11 +207,163 @@ body {
 
 
 
+<!-- Carousel==================================================-->
+<div id="myCarousel" class="carousel slide " >
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1" class=""></li>
+        <li data-target="#myCarousel" data-slide-to="2" class=""></li>
+    </ol>
+    
+    <div class="carousel-inner">
+        <div class="item active">
+            <img src="images/img_900_1.jpg" class="img-responsive">
+            
+            <div class="container" >
+                <div class="carousel-caption">
+                     <h1 class="">Welcome to DIA Project</h1>
+
+                    <pthis is="" an="" example="" layout="" with="" carousel="" that="" uses=""
+                    the="" bootstrap="" 3="" styles.<="" small="">
+                        <p class="">Taking technology to Nature</p>
+                    </pthis>
+                </div>
+            </div>
+           
+        </div>
+        
+        <div class="item">
+            <img src="images/img5.jpg" class="img-responsive">
+            <div class="container">
+                <div class="carousel-caption">
+                     <h1 class="">Get Start with Arduino</h1>
+
+                    <p class="">Make your own devices with Arduino</p>
+                    <p class=""><a class="btn btn-large btn-primary" href="http://www.arduino.cc/" target="ext">Get Start with Arduino</a>
+
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="images/img6.jpg" class="img-responsive">
+            <div class="container">
+                <div class="carousel-caption">
+                     <h1 class="">Save Water</h1>
+
+                    <p class="">Automate irrigation to save water.</p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Controls --> <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="icon-prev"></span>
+  </a>
+ <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="icon-next"></span>
+  </a> 
+</div>
+<!-- /.carousel -->
+
+
+
+
+<!-- Marketing messaging and featurettes==================================================-->
+<!-- Wrap the rest of the page in another container to center all the
+content. -->
+<div class="container marketing">
+    <!-- Three columns of text below the carousel -->
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <img class="img-circle" src="images/img_phone.png">
+             <h2 class="">Mobile Based</h2>
+
+            <p class="">Total system can be controlled by the USSD via telco platform.</p>
+            <p class=""><a class="btn btn-default" href="#">View details »</a>
+
+            </p>
+        </div>
+        <div class="col-md-4 text-center">
+            <img class="img-circle" src="images/img_brain.jpg">
+             <h2 class="">Inteligence System</h2>
+
+            <p class="">This can sense the weather and level of mosture of your garden.</p>
+            <p class=""><a class="btn btn-default" href="#">View details »</a>
+
+            </p>
+        </div>
+        <div class="col-md-4 text-center">
+            <img class="img-circle" src="images/img_web.png">
+             <h2 class="">Web Based Sheduling</h2>
+
+            <p class="">We on your water services when you want even you asleep.</p>
+            <p
+            class=""><a class="btn btn-default" href="#">View details »</a>
+
+                </p>
+        </div>
+    </div>
+    <!-- /.row -->
+    <!-- START THE FEATURETTES -->
+    <hr class="featurette-divider">
+    <div class="featurette">
+        <img class="featurette-image img-circle pull-right" src="images/img_irr_512.jpg">
+         <h2 class="featurette-heading">DIA. <span class="text-muted">Digital Irrigation Automation.</span></h2>
+
+        <p class="lead">DIA project is started to automate the local irrigation system to protect our water ways and provide a high technology 
+        based system to the local people. We deliver the technology to the people to make the gardens automated with Arduino and make an interligent environment 
+         by adding high quality sensers to Arduino.</p>
+    </div>
+    <hr class="featurette-divider">
+    <div class="featurette">
+        <img class="featurette-image img-circle pull-left" src="images/img_arduino.jpg">
+         <h2 class="featurette-heading">Powered by Arduino. <span class="text-muted">The famous open hardware.</span></h2>
+
+        <p class="lead">World famous 3D printing and robotic use arduino to as their micro-controller now we give it to your gardens to make it much wonderfull.
+        </p>
+    </div>
+    <hr class="featurette-divider">
+    <div class="featurette">
+        <img class="featurette-image img-circle pull-right" src="images/img_idea.jpg">
+         <h2 class="featurette-heading">Ideamart. <span class="text-muted">Based on Telco Platform.</span></h2>
+
+        <p class="lead">The whole system is based on Telco platform. All the device is connected with our server. LBS (Location Based System) give the 
+        location of your device and check weather to save your water. total system is controlled by SMS.</p>
+    </div>
+    <hr class="featurette-divider">
    
-        <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+ 
+    <div class="fb-like col-sm-4 col-sm-offset-4" data-href="https://www.facebook.com/yarlithub" 
+         data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+    
+    
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+    <!-- /END THE FEATURETTES -->
+    <!-- FOOTER -->
+    <footer>
+        <p class="pull-right"><a href="#" class="">Back to top</a>
+
+        </p>
+
+    </footer>
+</div>
 
 
-        <script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<!-- /.container -->       
+        <script type='text/javascript' src="js/vendor/jquery-1.11.0.js"></script>
+
+
+        <script type='text/javascript' src="js/vendor/bootstrap.min.js"></script>
 
 
 

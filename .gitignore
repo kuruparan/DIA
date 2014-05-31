@@ -15,3 +15,7 @@ target/
 
 #Linux unsaved files
 *~
+
+#netbeans files
+nbproject/
+
