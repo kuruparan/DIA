@@ -21,7 +21,7 @@ public class BaseController {
         model.addAttribute("message", "DIA Web Project + Spring 3 MVC - welcome()");
 
         //Spring uses InternalResourceViewResolver and return back index.jsp
-        return "index";
+        return "login";
 
     }
 
