@@ -96,18 +96,20 @@ public class SmsHandler implements MoSmsListener {
      */
     private MtSmsReq createRoutedSms(MoSmsReq moSmsReq) {
         MtSmsReq mtSmsReq = new MtSmsReq();
-
-        mtSmsReq.setMessage(moSmsReq.getMessage());
-        List<String> addressList = new ArrayList<String>();
-        DeviceAccess deviceAccess = DataLayer.getDeviceAccessByMask(moSmsReq.getSourceAddress());
-        LOGGER.info("Device access check : deviceId " + deviceAccess.getDevice_id());
-        if (deviceAccess.getId() > 0) {
-            device = DataLayer.getDeviceById(deviceAccess.getDevice_id());
-            addressList.add(device.getDevice_mask());
-            LOGGER.info("Detected user's device : " + device.getDevice_name());
+        String message = moSmsReq.getMessage();
+        message = message.toLowerCase();
+        if (message.startsWith("dia ")) {
+            mtSmsReq.setMessage(message.substring(4));
+            List<String> addressList = new ArrayList<String>();
+            DeviceAccess deviceAccess = DataLayer.getDeviceAccessByMask(moSmsReq.getSourceAddress());
+            LOGGER.info("Device access check : deviceId " + deviceAccess.getDevice_id());
+            if (deviceAccess.getId() > 0) {
+                device = DataLayer.getDeviceById(deviceAccess.getDevice_id());
+                addressList.add(device.getDevice_mask());
+                LOGGER.info("Detected user's device : " + device.getDevice_name());
+            }
+            mtSmsReq.setDestinationAddresses(addressList);
         }
-        mtSmsReq.setDestinationAddresses(addressList);
-
         return mtSmsReq;
     }
 
