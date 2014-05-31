@@ -8,8 +8,10 @@ import hms.kite.samples.api.ussd.messages.MtUssdReq;
 import hms.kite.samples.api.ussd.messages.MtUssdResp;
 import org.yarlithub.dia.repo.DataLayer;
 import org.yarlithub.dia.repo.object.Device;
+import org.yarlithub.dia.repo.object.DeviceAccess;
 import org.yarlithub.dia.util.Property;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -35,6 +37,7 @@ public class UssdRequestProcessor {
     // service to send the request
     private UssdRequestSender ussdMtSender;
     private Device device;
+    private DeviceAccess deviceAccess;
 
     public UssdRequestProcessor(UssdRequestSender ussdMtSender) {
         this.ussdMtSender = ussdMtSender;
@@ -72,9 +75,11 @@ public class UssdRequestProcessor {
             if (device.getId() > 0) {
                 serviceCode = "2";
             }
-//            if (DataLayer.isDevice()) {
-//                serviceCode = "3";
-//            }
+            deviceAccess = DataLayer.getDeviceAccessbyMask(moUssdReq.getSourceAddress());
+            if (deviceAccess.getId()>0) {
+                device= DataLayer.getDeviceById(deviceAccess.getDevice_id());
+                serviceCode = "3";
+            }
         } else {
             Boolean serviceCodeChanged = false;
             int currentMenuSize = menuState.size();
@@ -94,6 +99,7 @@ public class UssdRequestProcessor {
             } else if (currentMenuSize > 0 && lastMenuState.equals("111")) {
                 //User is entering pin again for confirmation for device.
                 if (device.getPin().equals(moUssdReq.getMessage())) {
+                    device.setDevice_mask(moUssdReq.getSourceAddress());
                     int results = DataLayer.updateNewDevice(device);
                     //terminate session by sending USSD_OP_MT_FIN
                     if (results == 1) {

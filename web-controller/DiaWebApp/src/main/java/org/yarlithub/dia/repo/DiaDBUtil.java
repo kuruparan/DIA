@@ -2,6 +2,7 @@ package org.yarlithub.dia.repo;
 
 import com.mysql.jdbc.Connection;
 import org.yarlithub.dia.repo.object.Device;
+import org.yarlithub.dia.repo.object.DeviceAccess;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,6 +42,32 @@ public class DiaDBUtil {
             LOGGER.log(Level.SEVERE, "SQLException: " + e);
         }
         return device;
+    }
+
+    /**
+     * Create Device instance by device resultSet from current index.
+     *
+     * @param sql SQL String
+     * @return device with positive id if successful, or id 0.
+     */
+    public static DeviceAccess getDeviceAccess(String sql) {
+
+        DeviceAccess deviceAccess = new DeviceAccess();
+        try {
+            Connection con = DiaDBConnector.getConnection();
+            ResultSet resultSet = sqlQuery(con, sql);
+            if (resultSet.next()) {
+                deviceAccess.setId(resultSet.getInt("id"));
+                deviceAccess.setDevice_id(resultSet.getInt("device_id"));
+                deviceAccess.setUser_mask(resultSet.getString("user_mask"));
+                deviceAccess.setUser_name(resultSet.getString("user_name"));
+            }
+            resultSet.close();
+            con.close();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "SQLException: " + e);
+        }
+        return deviceAccess;
     }
 
     /**

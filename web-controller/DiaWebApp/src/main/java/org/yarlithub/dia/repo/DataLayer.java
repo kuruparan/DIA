@@ -2,6 +2,7 @@ package org.yarlithub.dia.repo;
 
 import com.mysql.jdbc.Connection;
 import org.yarlithub.dia.repo.object.Device;
+import org.yarlithub.dia.repo.object.DeviceAccess;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,6 +24,17 @@ public class DataLayer {
     public static Device getDeviceByName(String device_name) {
         String sql = String.format("SELECT * FROM device WHERE device_name=\"%s\"", device_name);
         return DiaDBUtil.getDevice(sql);
+    }
+
+    public static Device getDeviceById(int id) {
+        String sql = String.format("SELECT * FROM device WHERE id=%s", id);
+        return DiaDBUtil.getDevice(sql);
+    }
+
+
+    public static DeviceAccess getDeviceAccessbyMask(String user_mask) {
+        String sql = String.format("SELECT * FROM device_access WHERE user_mask=\"%s\"", user_mask);
+        return DiaDBUtil.getDeviceAccess(sql);
     }
 
     public static boolean isUser() {
