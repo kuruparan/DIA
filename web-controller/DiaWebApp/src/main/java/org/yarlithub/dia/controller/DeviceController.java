@@ -22,20 +22,20 @@ public class DeviceController {
     public String addDevice(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
 
         Device device = new Device();
-        session = request.getSession();
-        device.setGarden_id((Integer) session.getAttribute("gardenId"));
-        device.setDevice_name(request.getParameter("deviceName"));
-        device.setPin(request.getParameter("pin"));
-        device.setId(DataLayer.reserveNewDevice());
-        DataLayer.updateNewDevice(device);
+        device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
+        if(device.getPin().equals(request.getParameter("pin"))){
+            session = request.getSession();
+            device.setGarden_id((Integer) session.getAttribute("gardenId"));
+            DataLayer.updateNewDevice(device);
 
-        List<Device> devices = DataLayer.getDevicesByGardenId(device.getGarden_id());
-        model.addAttribute("devices", devices);
-        request.setAttribute("gardenId", device.getGarden_id());
-        /*model.addAttribute("message", "DIA Web Project + Spring 3 MVC - welcome()");*/
+            List<Device> devices = DataLayer.getDevicesByGardenId(device.getGarden_id());
+            model.addAttribute("devices", devices);
+            request.setAttribute("gardenId", device.getGarden_id());
+            return "gardenHome";
+        } else{
+            return "addDevice" ;
+        }
 
-        //Spring uses InternalResourceViewResolver and return back index.jsp
-        return "gardenHome";
 
     }
 
