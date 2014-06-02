@@ -67,8 +67,8 @@ public class DataLayer {
             if (rs.next()) {
                 maxId = rs.getInt("id") + 1;
                 String sqlIncrement =
-                        String.format("INSERT INTO device (device_name, pin, device_mask, operation_mode, operation_type)" +
-                                " VALUES (\"%s\", \"reserved\", \"reserved\", 0, 0)"
+                        String.format("INSERT INTO device (device_name, pin, device_mask)" +
+                                " VALUES (\"%s\", \"reserved\", \"reserved\")"
                                 , String.valueOf(maxId));
                 DiaDBUtil.sqlUpdate(con, sqlIncrement);
             }

@@ -40,6 +40,7 @@ public class DiaDBUtil {
                 device.setGardenId(resultSet.getInt("garden_id"));
                 device.setOperationMode(resultSet.getInt("operation_mode"));
                 device.setOperationType(resultSet.getInt("operation_type"));
+                device.setCurrentStatus(resultSet.getInt("current_status"));
             }
             resultSet.close();
             con.close();
@@ -70,6 +71,7 @@ public class DiaDBUtil {
                 device.setGardenId(resultSet.getInt("garden_id"));
                 device.setOperationMode(resultSet.getInt("operation_mode"));
                 device.setOperationType(resultSet.getInt("operation_type"));
+                device.setCurrentStatus(resultSet.getInt("current_status"));
                 deviceList.add(device);
             }
             resultSet.close();

@@ -15,11 +15,13 @@ public class Device {
     private int gardenId;
     private int operationMode;
     private int operationType;
+    private int currentStatus;
 
     public Device() {
         this.id = 0;
         this.operationMode= OperationMode.DEFAULT;
         this.operationType= OperationType.MANUAL;
+        currentStatus = 0;
     }
 
     public int getId() {
@@ -76,5 +78,13 @@ public class Device {
 
     public void setOperationType(int operationType) {
         this.operationType = operationType;
+    }
+
+    public int getCurrentStatus() {
+        return currentStatus;
+    }
+
+    public void setCurrentStatus(int currentStatus) {
+        this.currentStatus = currentStatus;
     }
 }

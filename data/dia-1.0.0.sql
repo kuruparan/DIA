@@ -30,9 +30,10 @@ CREATE TABLE IF NOT EXISTS `dia`.`device` (
   `pin` VARCHAR(45) NOT NULL,
   `device_mask` VARCHAR(45) NOT NULL,
   `garden_id` INT NULL,
-  `operation_mode` INT NOT NULL,
-  `operation_type` INT NOT NULL,
+  `operation_mode` INT NOT NULL DEFAULT 0,
+  `operation_type` INT NOT NULL DEFAULT 0,
   `schedule` VARCHAR(500) NULL,
+  `current_status` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `device_name_UNIQUE` (`device_name` ASC),
   INDEX `fk_device_garden1_idx` (`garden_id` ASC),
@@ -74,7 +75,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `dia`;
-INSERT INTO `dia`.`device` (`id`, `device_name`, `pin`, `device_mask`, `garden_id`, `operation_mode`, `operation_type`, `schedule`) VALUES (1, 'initial-required', 'a;lksdfkjwoei#@%$!lskdfjcnjdalejlvj87327#', '99999999999', NULL, 0, 0, '');
+INSERT INTO `dia`.`device` (`id`, `device_name`, `pin`, `device_mask`, `garden_id`, `operation_mode`, `operation_type`, `schedule`, `current_status`) VALUES (1, 'initial-required', 'a;lksdfkjwoei#@%$!lskdfjcnjdalejlvj87327#', '99999999999', NULL, 0, 0, '', 0);
 
 COMMIT;
 
