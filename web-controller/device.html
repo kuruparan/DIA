@@ -74,23 +74,47 @@
 <div class="panel panel-success col-sm-6">
   <div class="panel-heading">Current Status</div>
   <div class="panel-body">
-  Device Status          ON<br/><br/>
-  Water follow           OFF<br/><br/>
-  <div class="row">
-      <div class="col-sm-3 col-sm-offset-1">
+      <div class="col-sm-4">Device Status </div>        
+  
+  
+  <button class="btn btn-default col-sm-offset-5" id="myToggleButton">ON</button>
+  
+  
+  
+  
+  <br/><br/>
+  <div class="col-sm-4">Water follow</div>         
+  
+  
+  
+  
+  <button class="btn btn-default col-sm-offset-5" id="myToggleButton">ON</button>
+  <br/><br/>
+  
+      <div class="col-sm-4">
           Mode  
       </div> 
-      <div class="col-sm-2">
-          <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret">Normal Mode</b></a>
+      <div class="col-sm-4 col-sm-offset-4">
+      <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Normal Mode <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Normal Mode</a></li>
                         <li><a href="#">Alert Mode</a></li>
-                        <li><a href="#">Intelligent Mode</a></li>
+                        <li><a href="#">Intelligent mode</a></li>
+    
                     </ul>
-                </li>
+                </div>
       </div>
-  </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+     
               
   </div>
 </div>
@@ -112,7 +136,7 @@
 
 </div>
 <div class="row">
-<div class="panel panel-default col-sm-10 col-sm-offset-1">
+<div class="panel panel-default col-sm-11">
   <div class="panel-heading">
     <h3 class="panel-title">Status Report</h3>
   </div>
@@ -207,6 +231,12 @@ $('#check-minutes').click(function(e){
 if (/mobile/i.test(navigator.userAgent)) {
 	$('input').prop('readOnly', true);
 }
+</script>
+<script type="text/javascript">
+var button = $('#myToggleButton');
+button.on('click', function () {
+  $(this).toggleClass('active');
+});
 </script>
 </body>
 </html>
