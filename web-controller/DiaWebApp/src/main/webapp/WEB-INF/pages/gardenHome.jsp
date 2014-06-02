@@ -95,7 +95,7 @@
         <tbody>
         	<c:forEach items="${devices}" var="device" >
                 <tr> 
-                    <th><c:out value="${device.device_name}" /></th>
+                    <th><c:out value="${device.deviceName}" /></th>
                     <th><c:out value="${device.pin}" /></th>
                     
                 </tr>

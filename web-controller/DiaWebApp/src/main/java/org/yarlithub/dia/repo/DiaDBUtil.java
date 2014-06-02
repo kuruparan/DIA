@@ -34,10 +34,12 @@ public class DiaDBUtil {
             ResultSet resultSet = sqlQuery(con, sql);
             if (resultSet.next()) {
                 device.setId(resultSet.getInt("id"));
-                device.setDevice_name(resultSet.getString("device_name"));
+                device.setDeviceName(resultSet.getString("device_name"));
                 device.setPin(resultSet.getString("pin"));
-                device.setDevice_mask(resultSet.getString("device_mask"));
-                device.setGarden_id(resultSet.getInt("garden_id"));
+                device.setDeviceMask(resultSet.getString("device_mask"));
+                device.setGardenId(resultSet.getInt("garden_id"));
+                device.setOperationMode(resultSet.getInt("operation_mode"));
+                device.setOperationType(resultSet.getInt("operation_type"));
             }
             resultSet.close();
             con.close();
@@ -59,13 +61,15 @@ public class DiaDBUtil {
         try {
             Connection con = DiaDBConnector.getConnection();
             ResultSet resultSet = sqlQuery(con, sql);
-            if (resultSet.next()) {
+            while(resultSet.next()) {
                 Device device = new Device();
                 device.setId(resultSet.getInt("id"));
-                device.setDevice_name(resultSet.getString("device_name"));
+                device.setDeviceName(resultSet.getString("device_name"));
                 device.setPin(resultSet.getString("pin"));
-                device.setDevice_mask(resultSet.getString("device_mask"));
-                device.setGarden_id(resultSet.getInt("garden_id"));
+                device.setDeviceMask(resultSet.getString("device_mask"));
+                device.setGardenId(resultSet.getInt("garden_id"));
+                device.setOperationMode(resultSet.getInt("operation_mode"));
+                device.setOperationType(resultSet.getInt("operation_type"));
                 deviceList.add(device);
             }
             resultSet.close();
@@ -90,9 +94,9 @@ public class DiaDBUtil {
             ResultSet resultSet = sqlQuery(con, sql);
             if (resultSet.next()) {
                 deviceAccess.setId(resultSet.getInt("id"));
-                deviceAccess.setDevice_id(resultSet.getInt("device_id"));
-                deviceAccess.setUser_mask(resultSet.getString("user_mask"));
-                deviceAccess.setUser_name(resultSet.getString("user_name"));
+                deviceAccess.setDeviceId(resultSet.getInt("device_id"));
+                deviceAccess.setUserMask(resultSet.getString("user_mask"));
+                deviceAccess.setUserName(resultSet.getString("user_name"));
             }
             resultSet.close();
             con.close();
@@ -116,7 +120,7 @@ public class DiaDBUtil {
             ResultSet resultSet = sqlQuery(con, sql);
             if (resultSet.next()) {
                 garden.setId(resultSet.getInt("id"));
-                garden.setGarden_name(resultSet.getString("garden_name"));
+                garden.setGardenName(resultSet.getString("garden_name"));
                 garden.setPassword(resultSet.getString("password"));
             }
             resultSet.close();

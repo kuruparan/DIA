@@ -1,18 +1,25 @@
 package org.yarlithub.dia.repo.object;
 
+import org.yarlithub.dia.util.OperationMode;
+import org.yarlithub.dia.util.OperationType;
+
 /**
  * Project YIT DIA
  * Created by jaykrish on 5/25/14.
  */
 public class Device {
  private int id;
-    private String device_name;
+    private String deviceName;
     private String pin;
-    private String device_mask;
-    private int garden_id;
+    private String deviceMask;
+    private int gardenId;
+    private int operationMode;
+    private int operationType;
 
     public Device() {
         this.id = 0;
+        this.operationMode= OperationMode.DEFAULT;
+        this.operationType= OperationType.MANUAL;
     }
 
     public int getId() {
@@ -23,12 +30,12 @@ public class Device {
         this.id = id;
     }
 
-    public String getDevice_name() {
-        return device_name;
+    public String getDeviceName() {
+        return deviceName;
     }
 
-    public void setDevice_name(String device_name) {
-        this.device_name = device_name;
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
     }
 
     public String getPin() {
@@ -39,19 +46,35 @@ public class Device {
         this.pin = pin;
     }
 
-    public String getDevice_mask() {
-        return device_mask;
+    public String getDeviceMask() {
+        return deviceMask;
     }
 
-    public void setDevice_mask(String device_mask) {
-        this.device_mask = device_mask;
+    public void setDeviceMask(String deviceMask) {
+        this.deviceMask = deviceMask;
     }
 
-    public int getGarden_id() {
-        return garden_id;
+    public int getGardenId() {
+        return gardenId;
     }
 
-    public void setGarden_id(int garden_id) {
-        this.garden_id = garden_id;
+    public void setGardenId(int gardenId) {
+        this.gardenId = gardenId;
+    }
+
+    public int getOperationMode() {
+        return operationMode;
+    }
+
+    public void setOperationMode(int operationMode) {
+        this.operationMode = operationMode;
+    }
+
+    public int getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(int operationType) {
+        this.operationType = operationType;
     }
 }

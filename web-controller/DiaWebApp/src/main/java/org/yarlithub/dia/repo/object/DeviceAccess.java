@@ -6,9 +6,9 @@ package org.yarlithub.dia.repo.object;
  */
 public class DeviceAccess {
     private int id;
-    private String user_name;
-    private String user_mask;
-    private int device_id;
+    private String userName;
+    private String userMask;
+    private int deviceId;
 
     public DeviceAccess() {
         this.id = 0;
@@ -22,27 +22,27 @@ public class DeviceAccess {
         this.id = id;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getUser_mask() {
-        return user_mask;
+    public String getUserMask() {
+        return userMask;
     }
 
-    public void setUser_mask(String user_mask) {
-        this.user_mask = user_mask;
+    public void setUserMask(String userMask) {
+        this.userMask = userMask;
     }
 
-    public int getDevice_id() {
-        return device_id;
+    public int getDeviceId() {
+        return deviceId;
     }
 
-    public void setDevice_id(int device_id) {
-        this.device_id = device_id;
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
     }
 }

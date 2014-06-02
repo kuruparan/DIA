@@ -138,7 +138,7 @@ a:focus {
 .intro-body {
     display: table-cell;
     vertical-align: middle;
-    height: 140%;
+    height: 100%;
 }
 
 .brand-heading {
@@ -157,7 +157,7 @@ color:#FBFBEF;
 
 @media(min-width:767px) {
     .intro {
-        height: 100%;
+        height: 110%;
         padding: 0;
     }
 
@@ -166,7 +166,7 @@ color:#FBFBEF;
     }
 
     .intro-text {
-        font-size: 25px;
+        font-size: 35px;
     }
 }
 

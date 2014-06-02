@@ -29,7 +29,7 @@ public class LoginController {
             model.addAttribute("devices", devices);
             session = request.getSession();
             session.setAttribute("gardenId", gn.getId());
-            session.setAttribute("gardenName", gn.getGarden_name());
+            session.setAttribute("gardenName", gn.getGardenName());
             return "gardenHome";
         } else {
             return "login";

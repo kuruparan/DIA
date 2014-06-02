@@ -25,12 +25,12 @@ public class DeviceController {
         device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
         if(device.getPin().equals(request.getParameter("pin"))){
             session = request.getSession();
-            device.setGarden_id((Integer) session.getAttribute("gardenId"));
+            device.setGardenId((Integer) session.getAttribute("gardenId"));
             DataLayer.updateNewDevice(device);
 
-            List<Device> devices = DataLayer.getDevicesByGardenId(device.getGarden_id());
+            List<Device> devices = DataLayer.getDevicesByGardenId(device.getGardenId());
             model.addAttribute("devices", devices);
-            request.setAttribute("gardenId", device.getGarden_id());
+            request.setAttribute("gardenId", device.getGardenId());
             return "gardenHome";
         } else{
             return "addDevice" ;
@@ -49,8 +49,8 @@ public class DeviceController {
     public void doPost(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException
 		{
 			Device device =new Device(); 
-			device.setGarden_id(Integer.parseInt(request.getParameter("gardenId")));
-			device.setDevice_name(request.getParameter("deviveName"));
+			device.setGardenId(Integer.parseInt(request.getParameter("gardenId")));
+			device.setDeviceName(request.getParameter("deviveName"));
 			device.setPin(request.getParameter("pin"));
 			device.setId(DBExecutor.reserveNewDevice());
 			DBExecutor.updateNewDevice(device);

@@ -30,6 +30,9 @@ CREATE TABLE IF NOT EXISTS `dia`.`device` (
   `pin` VARCHAR(45) NOT NULL,
   `device_mask` VARCHAR(45) NOT NULL,
   `garden_id` INT NULL,
+  `operation_mode` INT NOT NULL,
+  `operation_type` INT NOT NULL,
+  `schedule` VARCHAR(500) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `device_name_UNIQUE` (`device_name` ASC),
   INDEX `fk_device_garden1_idx` (`garden_id` ASC),
@@ -51,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `dia`.`device_access` (
   `device_id` INT NOT NULL,
   `user_name` VARCHAR(45) NULL,
   `user_mask` VARCHAR(45) NOT NULL,
+  `is_default` INT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `user_mask_UNIQUE` (`user_mask` ASC),
   CONSTRAINT `fk_device_access_device`
@@ -64,3 +68,13 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Data for table `dia`.`device`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `dia`;
+INSERT INTO `dia`.`device` (`id`, `device_name`, `pin`, `device_mask`, `garden_id`, `operation_mode`, `operation_type`, `schedule`) VALUES (1, 'initial-required', 'a;lksdfkjwoei#@%$!lskdfjcnjdalejlvj87327#', '99999999999', NULL, 0, 0, '');
+
+COMMIT;
+

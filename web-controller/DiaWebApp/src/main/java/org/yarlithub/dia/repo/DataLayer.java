@@ -43,7 +43,6 @@ public class DataLayer {
         return DiaDBUtil.getGarden(sql);
     }
 
-
     public static List<Device> getDevicesByGardenId(int gardenId) {
         String sql = String.format("SELECT * FROM device where garden_id=\"%s\"", gardenId);
         return DiaDBUtil.getDeviceList(sql);
@@ -68,8 +67,9 @@ public class DataLayer {
             if (rs.next()) {
                 maxId = rs.getInt("id") + 1;
                 String sqlIncrement =
-                        String.format("INSERT INTO device (device_name, pin, device_mask) VALUES (\"%s\",\"%s\",\"%s\")"
-                                , String.valueOf(maxId), "reserved", "reserved");
+                        String.format("INSERT INTO device (device_name, pin, device_mask, operation_mode, operation_type)" +
+                                " VALUES (\"%s\", \"reserved\", \"reserved\", 0, 0)"
+                                , String.valueOf(maxId));
                 DiaDBUtil.sqlUpdate(con, sqlIncrement);
             }
             rs.close();
@@ -85,9 +85,9 @@ public class DataLayer {
         int result = 0;
         Connection con = DiaDBConnector.getConnection();
         String sql = String.format("UPDATE device "
-                + "SET device_name = \"%s\", pin = \"%s\", device_mask = \"%s\", garden_id = \"%s\" "
+                + "SET device_name = \"%s\", pin = \"%s\", device_mask = \"%s\", garden_id = %s "
                 + "WHERE id = \"%s\""
-                , device.getDevice_name(), device.getPin(), device.getDevice_mask(), device.getGarden_id(), String.valueOf(device.getId()));
+                , device.getDeviceName(), device.getPin(), device.getDeviceMask(), device.getGardenId(), String.valueOf(device.getId()));
 
         try {
             result = DiaDBUtil.sqlUpdate(con, sql);
@@ -102,7 +102,7 @@ public class DataLayer {
         int result = 0;
         Connection con = DiaDBConnector.getConnection();
         String sql = String.format("INSERT INTO garden (garden_name, password)VALUES (\"%s\",\"%s\")"
-                , garden.getGarden_name(), garden.getPassword());
+                , garden.getGardenName(), garden.getPassword());
         try {
             result = DiaDBUtil.sqlUpdate(con, sql);
         } catch (SQLException e) {

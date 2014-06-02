@@ -20,14 +20,14 @@ public class RegistrationController {
     @RequestMapping(value = "/registerMe", method = RequestMethod.POST)
     public String doLogin(HttpServletRequest request, HttpServletResponse response) {
         Garden gn = new Garden();
-        gn.setGarden_name(request.getParameter("gardenName"));
+        gn.setGardenName(request.getParameter("gardenName"));
         gn.setPassword(request.getParameter("password"));
         DataLayer.addNewGarden(gn);
 
         gn = DataLayer.getGardenByName(request.getParameter("gardenName"));
         session = request.getSession();
         session.setAttribute("gardenId", gn.getId());
-        session.setAttribute("gardenName", gn.getGarden_name());
+        session.setAttribute("gardenName", gn.getGardenName());
         return "gardenHome";
     }
 }

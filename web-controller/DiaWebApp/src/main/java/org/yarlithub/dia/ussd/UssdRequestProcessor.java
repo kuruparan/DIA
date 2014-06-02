@@ -76,7 +76,7 @@ public class UssdRequestProcessor {
             }
             deviceAccess = DataLayer.getDeviceAccessByMask(moUssdReq.getSourceAddress());
             if (deviceAccess.getId()>0) {
-                device= DataLayer.getDeviceById(deviceAccess.getDevice_id());
+                device= DataLayer.getDeviceById(deviceAccess.getDeviceId());
                 serviceCode = "3";
             }
         } else {
@@ -88,7 +88,7 @@ public class UssdRequestProcessor {
                 int newDeviceReservedId = DataLayer.reserveNewDevice();
                 device = new Device();
                 device.setId(newDeviceReservedId);
-                device.setDevice_name("DIA" + String.valueOf(newDeviceReservedId));
+                device.setDeviceName("DIA" + String.valueOf(newDeviceReservedId));
             } else if (currentMenuSize > 0 && lastMenuState.equals("11")) {
                 //User is entering a new pin for device.
                 device.setPin(moUssdReq.getMessage());
@@ -98,7 +98,7 @@ public class UssdRequestProcessor {
             } else if (currentMenuSize > 0 && lastMenuState.equals("111")) {
                 //User is entering pin again for confirmation for device.
                 if (device.getPin().equals(moUssdReq.getMessage())) {
-                    device.setDevice_mask(moUssdReq.getSourceAddress());
+                    device.setDeviceMask(moUssdReq.getSourceAddress());
                     int results = DataLayer.updateNewDevice(device);
                     //terminate session by sending USSD_OP_MT_FIN
                     if (results == 1) {
@@ -124,7 +124,7 @@ public class UssdRequestProcessor {
                     serviceCodeChanged = true;
                 } else {
                     //to display no such device
-                    device.setDevice_name(moUssdReq.getMessage());
+                    device.setDeviceName(moUssdReq.getMessage());
                     //no such device
                     //special case: redirect to state 12 again <= do not add menuState.
                     createAndSendRequest(moUssdReq, buildMenuContent("122"), USSD_OP_MT_CONT);
@@ -293,7 +293,7 @@ public class UssdRequestProcessor {
         try {
             // build menu contents
             menuContent = getText(selection);
-            menuContent = String.format(menuContent, device.getDevice_name());
+            menuContent = String.format(menuContent, device.getDeviceName());
 
         } catch (MissingResourceException e) {
             // back to main menu

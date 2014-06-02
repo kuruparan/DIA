@@ -1,6 +1,7 @@
 package org.yarlithub.dia.sms;
 
 import org.junit.Test;
+import org.yarlithub.dia.util.OperationMode;
 
 import static org.junit.Assert.assertEquals;
 

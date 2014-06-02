@@ -6,7 +6,7 @@ package org.yarlithub.dia.repo.object;
  */
 public class Garden {
     private int id;
-    private String garden_name;
+    private String gardenName;
     private String password;
 
     public Garden() {
@@ -21,12 +21,12 @@ public class Garden {
         this.id = id;
     }
 
-    public String getGarden_name() {
-        return garden_name;
+    public String getGardenName() {
+        return gardenName;
     }
 
-    public void setGarden_name(String garden_name) {
-        this.garden_name = garden_name;
+    public void setGardenName(String gardenName) {
+        this.gardenName = gardenName;
     }
 
     public String getPassword() {
