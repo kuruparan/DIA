@@ -85,9 +85,9 @@ public class DataLayer {
         int result = 0;
         Connection con = DiaDBConnector.getConnection();
         String sql = String.format("UPDATE device "
-                + "SET device_name = \"%s\", pin = \"%s\", device_mask = \"%s\", garden_id = %s "
+                + "SET device_name = \"%s\", pin = \"%s\", device_mask = \"%s\""
                 + "WHERE id = \"%s\""
-                , device.getDeviceName(), device.getPin(), device.getDeviceMask(), device.getGardenId(), String.valueOf(device.getId()));
+                , device.getDeviceName(), device.getPin(), device.getDeviceMask(), String.valueOf(device.getId()));
 
         try {
             result = DiaDBUtil.sqlUpdate(con, sql);

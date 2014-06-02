@@ -39,6 +39,7 @@ public class SmsHandler implements MoSmsListener {
 
     @Override
     public void onReceivedSms(MoSmsReq moSmsReq) {
+        init();
         try {
             LOGGER.info("Sms Received for generate request : " + moSmsReq);
             String message = DiaSmsUtil.removeDIA(moSmsReq.getMessage());
@@ -111,6 +112,9 @@ public class SmsHandler implements MoSmsListener {
         } catch (Exception e) {
             LOGGER.log(Level.INFO, "Unexpected error occurred", e);
         }
+        smsMtSender=null;
+        smsRequestProcessor=null;
+
     }
 
 }
