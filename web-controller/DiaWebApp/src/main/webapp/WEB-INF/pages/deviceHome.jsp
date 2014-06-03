@@ -19,8 +19,24 @@
         var row = table.insertRow(0);
         var cell1 = row.insertCell(0);
         var cell2 = row.insertCell(1);
-        cell1.innerHTML ="start:"+document.getElementById("startTime").value;
-        cell2.innerHTML =" end:"+document.getElementById("endTime").value;
+        var cell3 = row.insertCell(2);
+        cell2.innerHTML ="-";
+
+
+        var m1 = document.createElement("input");
+        m1.setAttribute('type', 'text');
+        m1.setAttribute('style','width: 74px');
+        m1.setAttribute('value', "start:"+document.getElementById("startTime").value);
+        m1.readOnly=true;
+        cell1.appendChild(m1);
+
+        var m2 = document.createElement("input");
+        m2.setAttribute('type', 'text');
+        m2.setAttribute('style','width: 74px');
+        m2.setAttribute('value', "end:"+document.getElementById("endTime").value);
+        m2.readOnly=true;
+        cell3.appendChild(m2);
+
         }
 </script>
 
@@ -207,8 +223,9 @@
         <tbody>
             <c:forEach items="${schedules}" var="schedule" >
                             <tr>
-                                <td>start:<c:out value="${schedule.from}" /></td>
-                                <td> end:<c:out value="${schedule.to}" /></td>
+                                <td><input type="text" style="width: 74px" value='start:<c:out value="${schedule.from}"/>' readonly ></td>
+                                <td>-</td>
+                                <td><input type="text" style="width: 74px" value='start:<c:out value="${schedule.to}"/>' readonly ></td>
                             </tr>
              </c:forEach>
         </tbody>
