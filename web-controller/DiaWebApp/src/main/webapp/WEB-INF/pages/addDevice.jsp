@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix= "c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
@@ -87,12 +88,6 @@
 
 			<div class="form-group">
 				<div class="col-sm-offset-5 col-sm-10">
-					<div class="checkbox">
-						<label> <input type="checkbox"> Remember me
-						</label>
-
-					</div>
-
 
 					<div class="col-sm-4 col-sm-offset-1">
 						<button style="margin: 10%" type="submit"

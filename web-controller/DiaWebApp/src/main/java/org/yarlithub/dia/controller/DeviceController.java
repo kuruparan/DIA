@@ -30,13 +30,21 @@ public class DeviceController {
 
             List<Device> devices = DataLayer.getDevicesByGardenId(device.getGardenId());
             model.addAttribute("devices", devices);
-            request.setAttribute("gardenId", device.getGardenId());
             return "gardenHome";
         } else{
             return "addDevice" ;
         }
 
 
+    }
+    @RequestMapping(value = "/deviceHome", method = RequestMethod.GET)
+    public String goToDevice(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
+
+        Device device = new Device();
+        device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
+            DataLayer.updateNewDevice(device);
+            model.addAttribute("device", device);
+            return "deviceHome";
     }
 
     @RequestMapping(value = "/goToAddDevice", method = RequestMethod.GET)
