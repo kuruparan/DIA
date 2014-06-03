@@ -12,8 +12,18 @@ public class Device {
     private String deviceName;
     private String pin;
     private String deviceMask;
+    private String schedule;
     private int gardenId;
     private int operationMode;
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
+    }
+
     private int operationType;
     private int currentStatus;
 

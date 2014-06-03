@@ -13,7 +13,16 @@
     <link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap-clockpicker.min.css">
 
-
+<script type="text/javascript">
+     function addSchedule(){
+        var table = document.getElementById("scheduleTable");
+        var row = table.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        cell1.innerHTML ="start:"+document.getElementById("startTime").value;
+        cell2.innerHTML =" end:"+document.getElementById("endTime").value;
+        }
+</script>
 
 </head>
 <body style="margin-top:60px">
@@ -52,10 +61,10 @@
                     </ul>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                            <li class="active"><a href="#"><c:out value="${sessionScope.gardenName}"/></a></li>
-                            <li class="active"><a href="${contextPath}/signOut">Sign Out</a></li>
-            </ul>
+             <ul class="nav navbar-nav navbar-right">
+                                        <li class="active"><a href="#"><c:out value="${sessionScope.gardenName}"/></a></li>
+                                        <li class="active"><a href="${contextPath}/signOut">Sign Out</a></li>
+                        </ul>
         </div>
 
     </div>
@@ -89,8 +98,11 @@
 
 
 
+
   <br/><br/>
   <div class="col-sm-4">Water follow</div>
+
+
 
 
   <button class="btn btn-default col-sm-offset-5" id="myToggleButton">ON</button>
@@ -111,6 +123,16 @@
                 </div>
       </div>
 
+
+
+
+
+
+
+
+
+
+
   </div>
 </div>
 
@@ -123,39 +145,39 @@
     Moisture      52%<br/><br/>
     weather       Possiblity of raining<br/><br/>
 
+
+
   </div>
 </div>
 
 
 </div>
+
+
+
+<
 <div class="row">
-<div class="panel panel-default col-sm-11">
+<div class="panel panel-default col-sm-12">
   <div class="panel-heading">
     <h3 class="panel-title">Status Report</h3>
   </div>
   <div class="panel-body">
-<div class="row">
-              <div class="col-sm-4 col-sm-offset-1">
-                  Start time :
-              </div>
 
-              <div class="col-sm-4 col-sm-offset-0">
-                  <div class="form-group ">
-		<div class="input-group clockpicker">
-			<input type="text" class="form-control" value="09:30">
-			<span class="input-group-addon">
-				<span class="glyphicon glyphicon-time"></span>
-			</span>
-		</div>
-	</div>
-              </div>
-              <div class="col-sm-4 col-sm-offset-1">
+
+    <div class="col-sm-6">
+        <br/>
+        <br/>
+        <br/>
+
+              <div class="col-sm-3 col-sm-offset-0">
+                  Start time :<br/><br/><br/>
                   End time :
               </div>
-              <div class="col-sm-4 col-sm-offset-0">
-                    	<div class="form-group ">
+
+              <div class="col-sm-5 col-sm-offset-2">
+                  <div class="form-group ">
 		<div class="input-group clockpicker">
-			<input type="text" class="form-control" value="09:30">
+			<input type="text" id="startTime" class="form-control" value="09:30">
 			<span class="input-group-addon">
 				<span class="glyphicon glyphicon-time"></span>
 			</span>
@@ -163,9 +185,50 @@
 	</div>
               </div>
 
+              <div class="col-sm-5 col-sm-offset-2">
+                    	<div class="form-group ">
+		<div class="input-group clockpicker">
+			<input type="text" id="endTime" class="form-control" value="09:30">
+			<span class="input-group-addon">
+				<span class="glyphicon glyphicon-time"></span>
+			</span>
+		</div>
+	</div>
 
 
-          </div>
+
+              </div>
+         <button type="button" onclick="addSchedule()" class="btn btn-default col-sm-offset-2">Add this time interval</button>
+
+    	    </div>
+
+  <div class="col-sm-3">
+    <table id="scheduleTable">
+        <tbody>
+            <c:forEach items="${schedules}" var="schedule" >
+                            <tr>
+                                <td>start:<c:out value="${schedule.from}" /></td>
+                                <td> end:<c:out value="${schedule.to}" /></td>
+                            </tr>
+             </c:forEach>
+        </tbody>
+    </table>
+  </div>
+
+  <div class="col-sm-3 col-sm-offset-0">Schedule Active Days
+      <form action="">
+            <br/>
+            <input type="checkbox" name="day" value="mo">Monday <br/>
+            <input type="checkbox" name="day" value="tu">Tuesday <br/>
+            <input type="checkbox" name="day" value="tu">Wednesday<br/>
+            <input type="checkbox" name="day" value="tu">Thursday<br/>
+            <input type="checkbox" name="day" value="tu">Friday<br/>
+            <input type="checkbox" name="day" value="tu">Saturday<br/>
+            <input type="checkbox" name="day" value="tu">Sunday<br/>
+        </form>
+  </div>
+
+
   </div>
 </div>
 </div>
@@ -175,10 +238,32 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script type="text/javascript" src="resources/js/bootstrap/jquery-1.11.js"></script>
-<script type="text/javascript" src="resources/js/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="resources/js/bootstrap/bootstrap-clockpicker.min.js"></script>
+<<!-- Include all compiled plugins (below), or include individual files as needed -->
+ <script type="text/javascript" src="resources/js/bootstrap/jquery-1.11.js"></script>
+ <script type="text/javascript" src="resources/js/bootstrap/bootstrap.min.js"></script>
+ <script type="text/javascript" src="resources/js/bootstrap/bootstrap-clockpicker.min.js"></script>
+
 <script type="text/javascript">
 $('.clockpicker').clockpicker()
 	.find('input').change(function(){
