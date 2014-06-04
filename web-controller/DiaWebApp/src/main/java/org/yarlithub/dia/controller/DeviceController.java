@@ -28,7 +28,7 @@ public class DeviceController {
         if(device.getPin().equals(request.getParameter("pin"))){
             session = request.getSession();
             device.setGardenId((Integer) session.getAttribute("gardenId"));
-            DataLayer.updateNewDevice(device);
+            DataLayer.updateDevice(device);
 
             List<Device> devices = DataLayer.getDevicesByGardenId(device.getGardenId());
             model.addAttribute("devices", devices);
@@ -87,7 +87,7 @@ public class DeviceController {
         }
         Device device=DataLayer.getDeviceByName(request.getParameter("device"));
         device.setSchedule(shedule);
-        DataLayer.updateNewDevice(device);
+        DataLayer.updateDevice(device);
         //model.addAttribute("message", shedule);
         //return "index";
         List<Device> devices = DataLayer.getDevicesByGardenId(device.getGardenId());

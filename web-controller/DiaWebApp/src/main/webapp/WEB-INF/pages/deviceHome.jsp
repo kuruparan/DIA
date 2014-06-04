@@ -64,9 +64,11 @@
 
       var av=document.getElementsByName("day");
 
-      <c:forEach items="${daySche}" var="day" >
-        //todo
-       av[i].checked=true;
+      <c:forEach items="${daySche}" var="dayS" varStatus="counter">
+      var avx=${dayS};
+        if(avx!="0"){
+            av["${counter.index}"].checked=true;
+       }
       </c:forEach>
       }
 
