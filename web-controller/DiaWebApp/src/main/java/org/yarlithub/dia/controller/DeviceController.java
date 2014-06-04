@@ -58,10 +58,42 @@ public class DeviceController {
                     schedules.add(schedule);
                 }
             }
+            char[] daySche=ss[0].toCharArray();
             model.addAttribute("schedules", schedules);
+            model.addAttribute("daySche", daySche);
         }
         model.addAttribute("device", device);
         return "deviceHome";
+    }
+
+    @RequestMapping(value = "/updateSchedule", method = RequestMethod.POST)
+    public String updateSchedule(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
+
+        String ss1=request.getParameter("days");
+        String[] ss2=request.getParameterValues("start");
+        String[] ss3=request.getParameterValues("end");
+        String shedule=null;
+
+        if(ss1!=null){
+            ss1=ss1.replace("b","");
+           shedule=ss1;
+        }
+        if(ss2!=null&ss2!=null) {
+            for (int n = 0; n < ss2.length; n++) {
+                ss2[n]=ss2[n].replace("start:","");
+                ss3[n]=ss3[n].replace("end:","");
+                shedule+=":"+ss2[n]+"-"+ss3[n];
+            }
+        }
+        Device device=DataLayer.getDeviceByName(request.getParameter("device"));
+        device.setSchedule(shedule);
+        DataLayer.updateNewDevice(device);
+        //model.addAttribute("message", shedule);
+        //return "index";
+        List<Device> devices = DataLayer.getDevicesByGardenId(device.getGardenId());
+        model.addAttribute("devices", devices);
+        return "gardenHome";
+
     }
 
     @RequestMapping(value = "/goToAddDevice", method = RequestMethod.GET)

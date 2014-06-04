@@ -25,6 +25,7 @@
 
         var m1 = document.createElement("input");
         m1.setAttribute('type', 'text');
+        m1.setAttribute('name', 'start');
         m1.setAttribute('style','width: 74px');
         m1.setAttribute('value', "start:"+document.getElementById("startTime").value);
         m1.readOnly=true;
@@ -32,16 +33,47 @@
 
         var m2 = document.createElement("input");
         m2.setAttribute('type', 'text');
+        m2.setAttribute('name', 'end');
         m2.setAttribute('style','width: 74px');
         m2.setAttribute('value', "end:"+document.getElementById("endTime").value);
         m2.readOnly=true;
         cell3.appendChild(m2);
 
         }
+
+      function submitAllForm(){
+        var av=document.getElementsByName("day");
+        var addon="b";
+            for (e = 0; e < av.length; e++)
+            {
+                if (av[e].checked == true)
+                {
+                    addon +="1";
+                }
+                else{
+                    addon += "0";
+                }
+            }
+        document.getElementById("deviceId").value="<%=request.getParameter("deviceName")%>";
+        document.getElementById("daysId").value=addon;
+        document.getElementById("timeSchedule").submit();
+
+      }
+
+      function load(){
+
+      var av=document.getElementsByName("day");
+
+      <c:forEach items="${daySche}" var="day" >
+        //todo
+       av[i].checked=true;
+      </c:forEach>
+      }
+
 </script>
 
 </head>
-<body style="margin-top:60px">
+<body style="margin-top:60px" onload="load()">
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
@@ -219,21 +251,27 @@
     	    </div>
 
   <div class="col-sm-3">
+  <form id="timeSchedule" action="updateSchedule" method="post">
     <table id="scheduleTable">
+
         <tbody>
             <c:forEach items="${schedules}" var="schedule" >
                             <tr>
-                                <td><input type="text" style="width: 74px" value='start:<c:out value="${schedule.from}"/>' readonly ></td>
+                                <td><input type="text" name="start" style="width: 74px" value='start:<c:out value="${schedule.from}"/>' readonly ></td>
                                 <td>-</td>
-                                <td><input type="text" style="width: 74px" value='start:<c:out value="${schedule.to}"/>' readonly ></td>
+                                <td><input type="text" name="end" style="width: 74px" value='end:<c:out value="${schedule.to}"/>' readonly ></td>
                             </tr>
              </c:forEach>
         </tbody>
+        <input type="hidden" name="days" id="daysId"/>
+        <input type="hidden" name="device" id="deviceId"/>
+
     </table>
+    </form>
   </div>
 
   <div class="col-sm-3 col-sm-offset-0">Schedule Active Days
-      <form action="">
+      <form id="daySchedule">
             <br/>
             <input type="checkbox" name="day" value="mo">Monday <br/>
             <input type="checkbox" name="day" value="tu">Tuesday <br/>
@@ -244,8 +282,10 @@
             <input type="checkbox" name="day" value="tu">Sunday<br/>
         </form>
   </div>
-
-
+<br/>
+<br/>
+<br/>
+  <button type="button" onclick="submitAllForm()" class="btn btn-default col-sm-offset-2">Update Schedule</button>
   </div>
 </div>
 </div>
