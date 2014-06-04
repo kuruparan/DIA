@@ -70,6 +70,34 @@
             av["${counter.index}"].checked=true;
        }
       </c:forEach>
+
+      var sts=${device.currentStatus};
+       if(sts=="0"){
+          document.getElementById("myToggleButtonOFF").style.display="none";
+          document.getElementById("myToggleButtonON").style.display="block";
+      }else{
+          document.getElementById("myToggleButtonON").style.display="none";
+          document.getElementById("myToggleButtonOFF").style.display="block";
+      }
+    }
+
+      function clickToggle(x){
+        var formData,xhr;
+
+        formData = new FormData();
+        formData.append('deviceName', "${device.deviceName}");
+        if(x=="0"){
+            document.getElementById("myToggleButtonOFF").style.display="none";
+            document.getElementById("myToggleButtonON").style.display="block";
+            formData.append('status', "ON");
+        }else{
+            document.getElementById("myToggleButtonON").style.display="none";
+            document.getElementById("myToggleButtonOFF").style.display="block";
+            formData.append('status', "OFF");
+        }
+        xhr = new XMLHttpRequest();
+        xhr.open('POST','changeStatus', true);
+        xhr.send(formData);
       }
 
 </script>
@@ -138,74 +166,48 @@
 
 <div class="row">
 
-<div class="panel panel-success col-sm-6">
-  <div class="panel-heading">Current Status</div>
-  <div class="panel-body">
-      <div class="col-sm-4">Device Status </div>
+    <div class="panel panel-success col-sm-6">
+      <div class="panel-heading">Current Status</div>
 
-
-  <button class="btn btn-default col-sm-offset-5" id="myToggleButton">ON</button>
-
-
-
-
-  <br/><br/>
-  <div class="col-sm-4">Water follow</div>
-
-
-
-
-  <button class="btn btn-default col-sm-offset-5" id="myToggleButton">ON</button>
-  <br/><br/>
+      <br/>
+      <div class="col-sm-4">Water follow</div>
+      <button class="btn btn-default col-sm-offset-5" id="myToggleButtonON" onclick="clickToggle(1)">ON</button>
+      <button class="btn btn-default col-sm-offset-5" id="myToggleButtonOFF"  onclick="clickToggle(0)">OFF</button>
+      <br/>
+      <br/>
 
       <div class="col-sm-4">
           Mode
       </div>
+
+
       <div class="col-sm-4 col-sm-offset-4">
-      <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Normal Mode <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Normal Mode</a></li>
-                        <li><a href="#">Alert Mode</a></li>
-                        <li><a href="#">Intelligent mode</a></li>
-
-                    </ul>
-                </div>
+          <div class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Normal Mode <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Normal Mode</a></li>
+                            <li><a href="#">Alert Mode</a></li>
+                            <li><a href="#">Intelligent mode</a></li>
+                        </ul>
+          </div>
       </div>
+      <br/>
+      <br/>
+    </div>
 
-
-
-
-
-
-
-
-
-
-
-  </div>
-</div>
-
-<div class="panel panel-default col-sm-4 col-sm-offset-1">
-  <div class="panel-heading">
-    <h3 class="panel-title">Status Report</h3>
-  </div>
-  <div class="panel-body">
-    Temprature    32C<br/><br/>
-    Moisture      52%<br/><br/>
-    weather       Possiblity of raining<br/><br/>
-
-
-
-  </div>
+    <div class="panel panel-default col-sm-4 col-sm-offset-1">
+      <div class="panel-heading">
+        <h3 class="panel-title">Status Report</h3>
+      </div>
+      <div class="panel-body">
+        Temprature    32C<br/><br/>
+        Moisture      52%<br/><br/>
+        weather       Possiblity of raining<br/><br/>
+      </div>
+    </div>
 </div>
 
 
-</div>
-
-
-
-<
 <div class="row">
 <div class="panel panel-default col-sm-12">
   <div class="panel-heading">

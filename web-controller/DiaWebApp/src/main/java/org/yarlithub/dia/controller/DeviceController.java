@@ -96,6 +96,18 @@ public class DeviceController {
 
     }
 
+    @RequestMapping(value = "/changeStatus", method = RequestMethod.POST)
+    public String changeStatus(HttpServletRequest request) {
+        Device device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
+        if("ON".equals(request.getParameter("deviceName"))){
+           device.setCurrentStatus(1);
+        }else{
+           device.setCurrentStatus(0);
+        }
+        DataLayer.updateDevice(device);
+        return "addDevice";
+    }
+
     @RequestMapping(value = "/goToAddDevice", method = RequestMethod.GET)
     public String goTo() {
         return "addDevice";
