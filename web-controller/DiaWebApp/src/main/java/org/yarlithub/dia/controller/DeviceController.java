@@ -96,10 +96,11 @@ public class DeviceController {
 
     }
 
-    @RequestMapping(value = "/changeStatus", method = RequestMethod.POST)
+    @RequestMapping(value = "/changeStatus", method = RequestMethod.GET)
     public String changeStatus(HttpServletRequest request) {
-        Device device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
-        if("ON".equals(request.getParameter("deviceName"))){
+    	String s1=request.getParameter("deviceName");
+        Device device=DataLayer.getDeviceByName(s1);
+        if("ON".equals(request.getParameter("status"))){
            device.setCurrentStatus(1);
         }else{
            device.setCurrentStatus(0);

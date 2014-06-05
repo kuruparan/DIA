@@ -72,7 +72,7 @@
       </c:forEach>
 
       var sts=${device.currentStatus};
-       if(sts=="0"){
+       if(sts=="1"){
           document.getElementById("myToggleButtonOFF").style.display="none";
           document.getElementById("myToggleButtonON").style.display="block";
       }else{
@@ -82,22 +82,25 @@
     }
 
       function clickToggle(x){
-        var formData,xhr;
+        var url,xhr,stss;
 
-        formData = new FormData();
-        formData.append('deviceName', "${device.deviceName}");
+        formDataVar = new FormData();
+        formDataVar.append('deviceName', "${device.deviceName}");
+        <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
         if(x=="0"){
             document.getElementById("myToggleButtonOFF").style.display="none";
             document.getElementById("myToggleButtonON").style.display="block";
-            formData.append('status', "ON");
+            url="${contextPath}/changeStatus?deviceName=${device.deviceName}&status=ON";
         }else{
             document.getElementById("myToggleButtonON").style.display="none";
             document.getElementById("myToggleButtonOFF").style.display="block";
-            formData.append('status', "OFF");
+            url="${contextPath}/changeStatus?deviceName=${device.deviceName}&status=OFF";
         }
+        
+        
         xhr = new XMLHttpRequest();
-        xhr.open('POST','changeStatus', true);
-        xhr.send(formData);
+        xhr.open('GET',url, true);
+        xhr.send();
       }
 
 </script>
