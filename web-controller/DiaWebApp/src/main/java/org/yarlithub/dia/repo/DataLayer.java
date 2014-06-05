@@ -87,7 +87,24 @@ public class DataLayer {
         String sql = String.format("UPDATE device "
                 + "SET device_name = \"%s\", pin = \"%s\", device_mask = \"%s\""
                 + "WHERE id = \"%s\""
-                , device.getDeviceName(), device.getPin(), device.getDeviceMask(), String.valueOf(device.getId()));
+                , device.getDeviceName(), device.getPin(), device.getDeviceMask(),String.valueOf(device.getId()));
+
+        try {
+            result = DiaDBUtil.sqlUpdate(con, sql);
+            con.close();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "SQLException: " + e);
+        }
+        return result;
+    }
+
+    public static int updateDevice(Device device) {
+        int result = 0;
+        Connection con = DiaDBConnector.getConnection();
+        String sql = String.format("UPDATE device "
+                + "SET garden_id = \"%s\", schedule = \"%s\", current_status = \"%d\""
+                + "WHERE id = \"%s\""
+                ,device.getGardenId(),device.getSchedule(),device.getCurrentStatus(), String.valueOf(device.getId()));
 
         try {
             result = DiaDBUtil.sqlUpdate(con, sql);

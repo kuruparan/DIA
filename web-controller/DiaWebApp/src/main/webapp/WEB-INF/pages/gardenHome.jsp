@@ -18,6 +18,14 @@
     <script src="resources/js/html5shiv.js"></script>
     <script src="resources/js/respond.min-1.4.2.js"></script>
     <![endif]-->
+
+    <!--
+    <script type="text/javascript">
+            $('.table > tbody > tr').click(function() {
+               window.alert(
+            });
+    </script>-->
+
 </head>
 <body style="margin-top:60px">
 
@@ -71,7 +79,7 @@
         <h1> Welcome to Garden</h1>
         <div class="col-sm-2 col-sm-offset-10">
                 <form action="goToAddDevice" method="get">
-                    <input type="hidden" name="gardenId" value="<%request.getParameter("gardenId");%>"/>
+                   <!-- <input type="hidden" name="gardenId" value="<%request.getParameter("gardenId");%>"/>-->
                     <button style="margin:5%" type="submit" class="btn btn-lg btn-success col-sm-12">Add Device</button>
                 </form>
         </div>
@@ -83,7 +91,7 @@
   <div class="panel-heading">Devices</div>
 
   <!-- Table -->
-<table class="table">
+<table class="table" data-link="row">
         <thead>
           <tr>
             <th>Device Name</th>
@@ -95,9 +103,9 @@
         <tbody>
         	<c:forEach items="${devices}" var="device" >
                 <tr> 
-                    <th><c:out value="${device.deviceName}" /></th>
+                    <th><a href="${contextPath}/deviceHome?deviceName=<c:out value='${device.deviceName}'/>"><c:out value="${device.deviceName}" /></a></th>
                     <th><c:out value="${device.pin}" /></th>
-                    
+                    <th><c:out value="${device.currentStatus}" /></th>
                 </tr>
             </c:forEach>
         
