@@ -8,7 +8,9 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="resources/bootstrap-3.1.1-dist/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="resources/bootstrap-3.1.1-dist/css/bootstrap-clockpicker.min.css">
+    <link href="resources/bootstrap-3.1.1-dist/css/button.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap-3.1.1-dist/css/bootstrap-clockpicker.min.css">
 
 </head>
 <body style="margin-top:60px">
@@ -74,21 +76,41 @@
 <div class="panel panel-success col-sm-6">
   <div class="panel-heading">Current Status</div>
   <div class="panel-body">
-      <div class="col-sm-4">Device Status </div>        
-  
-  
-  <button class="btn btn-default col-sm-offset-5" id="myToggleButton">ON</button>
-  
-  
+      
+      
+      <div class="row">
+          <div class="col-sm-4">Device Status </div>  
+          <div class="col-sm-2 col-sm-offset-4">
+               <div class="onoffswitch">
+    <input type="checkbox" name="onoffswitch1" class="onoffswitch-checkbox" id="myonoffswitch1" checked>
+    <label class="onoffswitch-label" for="myonoffswitch">
+        <span class="onoffswitch-inner"></span>
+        <span class="onoffswitch-switch"></span>
+    </label>
+</div>
+          </div>
+ 
+      </div>
+      
+      
   
   
   <br/><br/>
-  <div class="col-sm-4">Water follow</div>         
+  
+  
+  
+  <div class="row">
+          <div class="col-sm-4">Water follow</div>  
+          <div class="col-sm-2 col-sm-offset-4">
+                    ON
+          </div>
+ 
+      </div>
   
   
   
   
-  <button class="btn btn-default col-sm-offset-5" id="myToggleButton">ON</button>
+  
   <br/><br/>
   
       <div class="col-sm-4">
