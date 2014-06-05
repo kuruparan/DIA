@@ -79,13 +79,13 @@
           document.getElementById("myToggleButtonON").style.display="none";
           document.getElementById("myToggleButtonOFF").style.display="block";
       }
+      
+      document.getElementById("ModeSelectId").selectedIndex = ${device.operationMode};
     }
 
       function clickToggle(x){
         var url,xhr,stss;
 
-        formDataVar = new FormData();
-        formDataVar.append('deviceName', "${device.deviceName}");
         <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
         if(x=="0"){
             document.getElementById("myToggleButtonOFF").style.display="none";
@@ -96,8 +96,18 @@
             document.getElementById("myToggleButtonOFF").style.display="block";
             url="${contextPath}/changeStatus?deviceName=${device.deviceName}&status=OFF";
         }
-        
-        
+              
+        xhr = new XMLHttpRequest();
+        xhr.open('GET',url, true);
+        xhr.send();
+      }
+      
+      function changeMode(x){
+        var url;
+
+        <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+        url="${contextPath}/changeMode?deviceName=${device.deviceName}&operationMode="+x;
+         
         xhr = new XMLHttpRequest();
         xhr.open('GET',url, true);
         xhr.send();
@@ -185,14 +195,13 @@
 
 
       <div class="col-sm-4 col-sm-offset-4">
-          <div class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Normal Mode <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Normal Mode</a></li>
-                            <li><a href="#">Alert Mode</a></li>
-                            <li><a href="#">Intelligent mode</a></li>
-                        </ul>
-          </div>
+	      <div class="row-fluid">
+	          <select class="selectpicker span2" id="ModeSelectId" onchange="changeMode(this.selectedIndex)">
+	    		<option>Normal Mode</option>
+	    		<option>Alert Mode</option>
+	    		<option>Intelligent Mode</option>
+	  		  </select>
+	  	  </div>
       </div>
       <br/>
       <br/>
