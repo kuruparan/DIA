@@ -23,28 +23,28 @@
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
-            cell2.innerHTML = " - ";
+            cell2.innerHTML = "";
 
 
             var m1 = document.createElement("input");
             m1.setAttribute('type', 'hidden');
             m1.setAttribute('name', 'start');
             m1.setAttribute('value', "start:" + document.getElementById("startTime").value);
-            m1.readOnly = true;
-            cell1.appendChild(m1);
+            m1.readOnly = true;           
             cell1.innerHTML = document.getElementById("startTime").value;
+            cell1.appendChild(m1);
 
             var m2 = document.createElement("input");
             m2.setAttribute('type', 'hidden');
             m2.setAttribute('name', 'end');
-        m2.setAttribute('value', "end:"+document.getElementById("endTime").value);
-        m2.readOnly=true;
-        cell3.appendChild(m2);
+        	m2.setAttribute('value', "end:"+document.getElementById("endTime").value);
+        	m2.readOnly=true;  	
             cell3.innerHTML = document.getElementById("endTime").value;
+            cell3.appendChild(m2);
 
         }
 
-      function submitAllForm(){
+      function submitAllForms(){
         var av=document.getElementsByName("day");
         var addon="b";
             for (e = 0; e < av.length; e++)
@@ -76,27 +76,29 @@
 
       var sts=${device.currentStatus};
        if(sts=="1"){
-          document.getElementById("myToggleButtonOFF").style.display="none";
-          document.getElementById("myToggleButtonON").style.display="block";
+          document.getElementById("myonoffswitch").checked=true;
       }else{
-          document.getElementById("myToggleButtonON").style.display="none";
-          document.getElementById("myToggleButtonOFF").style.display="block";
+    	  document.getElementById("myonoffswitch").checked=false;
       }
+
+          var stss=${device.operationType};
+          if(stss=="1"){
+              document.getElementById("scheduleonoffswitch").value="Scheduled";
+          }else{
+              document.getElementById("scheduleonoffswitch").value="Manual";
+          }
+
       
       document.getElementById("ModeSelectId").selectedIndex = ${device.operationMode};
     }
 
-      function clickToggle(x){
-        var url,xhr,stss;
+      function clickToggle(){
+        var url,xhr;
 
         <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-        if(x=="0"){
-            document.getElementById("myToggleButtonOFF").style.display="none";
-            document.getElementById("myToggleButtonON").style.display="block";
+        if(document.getElementById("myonoffswitch").checked){
             url="${contextPath}/changeStatus?deviceName=${device.deviceName}&status=ON";
         }else{
-            document.getElementById("myToggleButtonON").style.display="none";
-            document.getElementById("myToggleButtonOFF").style.display="block";
             url="${contextPath}/changeStatus?deviceName=${device.deviceName}&status=OFF";
         }
               
@@ -104,6 +106,24 @@
         xhr.open('GET',url, true);
         xhr.send();
       }
+
+        function clickToggleSh(){
+            var url,xhr;
+
+            <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+            var elem=document.getElementById("scheduleonoffswitch");
+            if(elem.value=="Manual"){
+                url="${contextPath}/changeOperationType?deviceName=${device.deviceName}&operationType=1";
+                elem.value="Scheduled"
+            }else{
+                url="${contextPath}/changeOperationType?deviceName=${device.deviceName}&operationType=0";
+                elem.value="Manual"
+            }
+
+            xhr = new XMLHttpRequest();
+            xhr.open('GET',url, true);
+            xhr.send();
+        }
       
       function changeMode(x){
         var url;
@@ -114,6 +134,10 @@
         xhr = new XMLHttpRequest();
         xhr.open('GET',url, true);
         xhr.send();
+      }
+      
+      function reloadPage(){
+    	  location.reload();
       }
 
 </script>
@@ -219,7 +243,7 @@
             </div>
             <div class="onoffswitch col-sm-offset-3">
                 <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
-                       id="myonoffswitch" onchange="clickToggle(this.value)" checked>
+                       id="myonoffswitch" onchange="clickToggle()">
                 <label class="onoffswitch-label" for="myonoffswitch">
                     <span class="onoffswitch-inner"></span>
                     <span class="onoffswitch-switch"></span>
@@ -271,9 +295,21 @@
 <div class="row">
     <div class="thumbnail col-sm-12">
 
-        <h3 class="lead">Device Schedule</h3>
 
 
+        <div class="row">
+            <div class="lead col-sm-3 col-sm-offset-3">Device Schedule</div>
+            <div class="onoffswitch col-sm-2 ">
+                <input id="scheduleonoffswitch" onclick="clickToggleSh()"
+                       class="btn branding-background" type="button">
+                </input>
+            </div>
+
+
+            <div class="col-sm-1 btn btn-default pull-right"><span class="glyphicon glyphicon-refresh ">  </span></div>
+
+
+        </div>
         <div class="col-sm-7">
 
             <div class="thumbnail" style="padding-top: 0;">
@@ -323,16 +359,16 @@
 
                             </td>
                             <td>
-                                <c:out value="${schedule.from}"/>
+                                <c:out value="${schedule.to}"/>
                                 <input type="hidden" name="end"
                                        value='end:<c:out value="${schedule.to}"/>' readonly>
                             </td>
                         </tr>
                     </c:forEach>
                     </tbody>
-                    <input type="hidden" name="days" id="daysId"/>
-                    <input type="hidden" name="device" id="deviceId"/>
                 </table>
+                 	<input type="hidden" name="days" id="daysId"/>
+                    <input type="hidden" name="device" id="deviceId"/>
             </form>
 
         </div>
@@ -349,7 +385,7 @@
             </form>
         </div>
 
-        <button type="clear" class="btn btn-lg btn-default  col-sm-offset-3">Cancel and Reset Default</button>
+        <button type="clear" onclick="reloadPage()" class="btn btn-lg btn-default  col-sm-offset-3">Cancel and Reset Default</button>
         <%--<button type="button" onclick="submitAllForm()" class="btn btn-lg btn-success">Update and Activate this--%>
             <%--Schedule--%>
         <%--</button>--%>
@@ -386,8 +422,8 @@
                         <br/>
                         <br/>
                         <br/>
-                        <button type="button" class="btn btn-default col-sm-offset-7" data-dismiss="modal">Not Now</button>
-                        <button type="button" class="btn btn-success" data-dismiss="modal">Send</button>
+                        <button type="button" class="btn btn-default col-sm-offset-7" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="submitAllForms()">Send</button>
                     </div>
 
 
