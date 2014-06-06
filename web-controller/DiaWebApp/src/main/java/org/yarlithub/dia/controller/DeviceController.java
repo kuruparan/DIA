@@ -106,7 +106,15 @@ public class DeviceController {
            device.setCurrentStatus(0);
         }
         DataLayer.updateDevice(device);
-        return "addDevice";
+        return "gardenHome";
+    }
+    
+    @RequestMapping(value = "/changeMode", method = RequestMethod.GET)
+    public String changeMode(HttpServletRequest request) {
+        Device device=DataLayer.getDeviceByName(request.getParameter("deviceName"));    
+        device.setOperationMode(Integer.parseInt(request.getParameter("operationMode")));       
+        DataLayer.updateDevice(device);
+        return "gardenHome";
     }
 
     @RequestMapping(value = "/goToAddDevice", method = RequestMethod.GET)

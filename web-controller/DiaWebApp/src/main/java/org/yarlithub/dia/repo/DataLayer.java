@@ -102,10 +102,9 @@ public class DataLayer {
         int result = 0;
         Connection con = DiaDBConnector.getConnection();
         String sql = String.format("UPDATE device "
-                + "SET garden_id = \"%s\", schedule = \"%s\", current_status = \"%d\""
+                + "SET garden_id = \"%s\", schedule = \"%s\", current_status = \"%d\", operation_mode = \"%d\""
                 + "WHERE id = \"%s\""
-                ,device.getGardenId(),device.getSchedule(),device.getCurrentStatus(), String.valueOf(device.getId()));
-
+                ,device.getGardenId(),device.getSchedule(),device.getCurrentStatus(),device.getOperationMode(), String.valueOf(device.getId()));
         try {
             result = DiaDBUtil.sqlUpdate(con, sql);
             con.close();
