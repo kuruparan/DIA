@@ -8,9 +8,11 @@ import org.yarlithub.dia.repo.DataLayer;
 import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.repo.object.Schedule;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class DeviceController {
         Device device;
         device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
         if(device.getSchedule()!=null){
-            String [] ss=device.getSchedule().split(":");
+            String [] ss=device.getSchedule().split(";");
             String [] temSS;
             Schedule schedule;
             List<Schedule> schedules=new ArrayList<Schedule>();
@@ -67,7 +69,7 @@ public class DeviceController {
     }
 
     @RequestMapping(value = "/updateSchedule", method = RequestMethod.POST)
-    public String updateSchedule(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
+    public void updateSchedule(ModelMap model, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String ss1=request.getParameter("days");
         String[] ss2=request.getParameterValues("start");
@@ -82,17 +84,14 @@ public class DeviceController {
             for (int n = 0; n < ss2.length; n++) {
                 ss2[n]=ss2[n].replace("start:","");
                 ss3[n]=ss3[n].replace("end:","");
-                shedule+=":"+ss2[n]+"-"+ss3[n];
+                shedule+=";"+ss2[n]+"-"+ss3[n];
             }
         }
         Device device=DataLayer.getDeviceByName(request.getParameter("device"));
         device.setSchedule(shedule);
         DataLayer.updateDevice(device);
-        //model.addAttribute("message", shedule);
-        //return "index";
-        List<Device> devices = DataLayer.getDevicesByGardenId(device.getGardenId());
-        model.addAttribute("devices", devices);
-        return "gardenHome";
+        request.setAttribute("deviceName",device.getDeviceName());
+        response.sendRedirect("/dia/deviceHome?deviceName="+device.getDeviceName());
 
     }
 

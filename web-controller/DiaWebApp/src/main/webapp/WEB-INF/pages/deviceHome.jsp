@@ -384,7 +384,7 @@
                         <br/>
                         <br/>
                         <br/>
-                        <button type="button" class="btn btn-default col-sm-offset-7" data-dismiss="modal" onclick="submitAllForms()">Not Now</button>
+                        <button type="button" class="btn btn-default col-sm-offset-7" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-success" data-dismiss="modal" onclick="submitAllForms()">Send</button>
                     </div>
 
