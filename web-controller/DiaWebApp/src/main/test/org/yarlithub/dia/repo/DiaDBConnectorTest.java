@@ -14,6 +14,7 @@ public class DiaDBConnectorTest {
     @Test
     public void testConnection() {
         //assertNotNull(DiaDBConnector.getConnection("", "", ""));
+        System.out.println("dd on T:30;M:80".substring(13));
     }
 
 }

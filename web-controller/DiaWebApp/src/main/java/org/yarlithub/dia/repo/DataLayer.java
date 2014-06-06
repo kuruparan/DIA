@@ -38,6 +38,11 @@ public class DataLayer {
         return DiaDBUtil.getDeviceAccess(sql);
     }
 
+    public static DeviceAccess getDeviceAccessByDevice(String device_id) {
+        String sql = String.format("SELECT * FROM device_access WHERE device_id=\"%s\"", device_id);
+        return DiaDBUtil.getDeviceAccess(sql);
+    }
+
     public static Garden getGardenByName(String garden_name) {
         String sql = String.format("SELECT * FROM garden WHERE garden_name=\"%s\"", garden_name);
         return DiaDBUtil.getGarden(sql);

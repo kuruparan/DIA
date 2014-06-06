@@ -12,11 +12,15 @@ import hms.kite.samples.api.sms.SmsRequestSender;
 import hms.kite.samples.api.sms.messages.MoSmsReq;
 import hms.kite.samples.api.sms.messages.MtSmsReq;
 import hms.kite.samples.api.sms.messages.MtSmsResp;
+import org.yarlithub.dia.repo.DataLayer;
 import org.yarlithub.dia.repo.object.Device;
+import org.yarlithub.dia.repo.object.DeviceAccess;
 import org.yarlithub.dia.util.Property;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,6 +52,25 @@ public class SmsHandler implements MoSmsListener {
 
             if (message.startsWith("dd")) {
                 //message received from device
+                Device device = DataLayer.getDeviceByMask(moSmsReq.getSourceAddress());
+                if (device.getId() > 0) {
+                    DeviceAccess deviceAccess = DataLayer.getDeviceAccessByDevice(String.valueOf(device.getId()));
+
+                    List<String> addressList = new ArrayList<String>();
+                    addressList.add(deviceAccess.getUserMask());
+                    userMtSms = DiaSmsUtil.createUserReplyMtSms(moSmsReq);
+                    userMtSms.setDestinationAddresses(addressList);
+
+                    if (message.startsWith("dd on")) {
+                        message = message.substring(6);
+                        String temperature = message.substring(8,10);
+                        String moisture = message.substring(13);
+
+                        //TODO: send sensor data to DIA intellegent and get message
+                        userMtSms.setMessage("Device switched on, Moisture level " +moisture+"%, temperature "+temperature +" C." );
+                    }
+                }
+
             } else {
                 //message received from user
                 deviceMtSms = DiaSmsUtil.createDeviceCommandMtSms(moSmsReq);
