@@ -7,37 +7,40 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>Dia Device Home</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap-clockpicker.min.css">
-
-<script type="text/javascript">
-     function addSchedule(){
-        var table = document.getElementById("scheduleTable");
-        var row = table.insertRow(0);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        cell2.innerHTML ="-";
+    <link rel="stylesheet" type="text/css" href="resources/css/toggle-switch.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/dia.css">
 
 
-        var m1 = document.createElement("input");
-        m1.setAttribute('type', 'text');
-        m1.setAttribute('name', 'start');
-        m1.setAttribute('style','width: 74px');
-        m1.setAttribute('value', "start:"+document.getElementById("startTime").value);
-        m1.readOnly=true;
-        cell1.appendChild(m1);
+    <script type="text/javascript">
+        function addSchedule() {
+            var table = document.getElementById("scheduleTable");
+            var row = table.insertRow(0);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell2.innerHTML = " - ";
 
-        var m2 = document.createElement("input");
-        m2.setAttribute('type', 'text');
-        m2.setAttribute('name', 'end');
-        m2.setAttribute('style','width: 74px');
+
+            var m1 = document.createElement("input");
+            m1.setAttribute('type', 'hidden');
+            m1.setAttribute('name', 'start');
+            m1.setAttribute('value', "start:" + document.getElementById("startTime").value);
+            m1.readOnly = true;
+            cell1.appendChild(m1);
+            cell1.innerHTML = document.getElementById("startTime").value;
+
+            var m2 = document.createElement("input");
+            m2.setAttribute('type', 'hidden');
+            m2.setAttribute('name', 'end');
         m2.setAttribute('value', "end:"+document.getElementById("endTime").value);
         m2.readOnly=true;
         cell3.appendChild(m2);
+            cell3.innerHTML = document.getElementById("endTime").value;
 
         }
 
@@ -115,6 +118,51 @@
 
 </script>
 
+    <%--Google pie chart for weather meter--%>
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+        google.load('visualization', '1', {packages: ['gauge']});
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['\'C', 32]
+
+            ]);
+
+            var options = {
+                min: 0, max: 50,
+                width: 500, height: 165,
+                greenFrom: 20, greenTo: 35,
+                redFrom: 35, redTo: 50,
+                yellowFrom: 0, yellowTo: 20,
+                minorTicks: 3
+            };
+
+            var chart = new google.visualization.Gauge(document.getElementById('temp_meter'));
+            chart.draw(data, options);
+
+            var data1 = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['%', 80]
+
+            ]);
+
+            var options1 = {
+                min: 0, max: 100,
+                width: 500, height: 165,
+                redFrom: 90, redTo: 100,
+                yellowFrom: 45, yellowTo: 90,
+                greenFrom: 0, greenTo: 45,
+                minorTicks: 5
+            };
+
+            var chart1 = new google.visualization.Gauge(document.getElementById('moi_meter'));
+            chart1.draw(data1, options1);
+        }
+    </script>
+
+
 </head>
 <body style="margin-top:60px" onload="load()">
 
@@ -136,34 +184,19 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
+                <li class="active"><a href="#">Device Home</a></li>
             </ul>
              <ul class="nav navbar-nav navbar-right">
                                         <li class="active"><a href="#"><c:out value="${sessionScope.gardenName}"/></a></li>
                                         <li class="active"><a href="${contextPath}/signOut">Sign Out</a></li>
-                        </ul>
+                 <li><a href="#about">About</a></li>
+                 <li><a href="#contact">Contact</a></li>
+             </ul>
         </div>
 
     </div>
 </div>
 <!-- /Fixed navbar -->
-
-<br/>
-<br/>
 
 <div class="container">
 
@@ -175,167 +208,220 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 
 
+    <div class="row">
 
 
-<div class="row">
+        <div class="thumbnail col-sm-6">
 
-    <div class="panel panel-success col-sm-6">
-      <div class="panel-heading">Current Status</div>
-
-      <br/>
-      <div class="col-sm-4">Water follow</div>
-      <button class="btn btn-default col-sm-offset-5" id="myToggleButtonON" onclick="clickToggle(1)">ON</button>
-      <button class="btn btn-default col-sm-offset-5" id="myToggleButtonOFF"  onclick="clickToggle(0)">OFF</button>
-      <br/>
-      <br/>
-
-      <div class="col-sm-4">
-          Mode
-      </div>
-
-
-      <div class="col-sm-4 col-sm-offset-4">
-	      <div class="row-fluid">
-	          <select class="selectpicker span2" id="ModeSelectId" onchange="changeMode(this.selectedIndex)">
-	    		<option>Normal Mode</option>
-	    		<option>Alert Mode</option>
-	    		<option>Intelligent Mode</option>
-	  		  </select>
-	  	  </div>
-      </div>
-      <br/>
-      <br/>
-    </div>
-
-    <div class="panel panel-default col-sm-4 col-sm-offset-1">
-      <div class="panel-heading">
-        <h3 class="panel-title">Status Report</h3>
-      </div>
-      <div class="panel-body">
-        Temprature    32C<br/><br/>
-        Moisture      52%<br/><br/>
-        weather       Possiblity of raining<br/><br/>
-      </div>
-    </div>
-</div>
-
-
-<div class="row">
-<div class="panel panel-default col-sm-12">
-  <div class="panel-heading">
-    <h3 class="panel-title">Status Report</h3>
-  </div>
-  <div class="panel-body">
-
-
-    <div class="col-sm-6">
-        <br/>
-        <br/>
-        <br/>
-
-              <div class="col-sm-3 col-sm-offset-0">
-                  Start time :<br/><br/><br/>
-                  End time :
-              </div>
-
-              <div class="col-sm-5 col-sm-offset-2">
-                  <div class="form-group ">
-		<div class="input-group clockpicker">
-			<input type="text" id="startTime" class="form-control" value="09:30">
-			<span class="input-group-addon">
-				<span class="glyphicon glyphicon-time"></span>
-			</span>
-		</div>
-	</div>
-              </div>
-
-              <div class="col-sm-5 col-sm-offset-2">
-                    	<div class="form-group ">
-		<div class="input-group clockpicker">
-			<input type="text" id="endTime" class="form-control" value="09:30">
-			<span class="input-group-addon">
-				<span class="glyphicon glyphicon-time"></span>
-			</span>
-		</div>
-	</div>
-
-
-
-              </div>
-         <button type="button" onclick="addSchedule()" class="btn btn-default col-sm-offset-2">Add this time interval</button>
-
-    	    </div>
-
-  <div class="col-sm-3">
-  <form id="timeSchedule" action="updateSchedule" method="post">
-    <table id="scheduleTable">
-
-        <tbody>
-            <c:forEach items="${schedules}" var="schedule" >
-                            <tr>
-                                <td><input type="text" name="start" style="width: 74px" value='start:<c:out value="${schedule.from}"/>' readonly ></td>
-                                <td>-</td>
-                                <td><input type="text" name="end" style="width: 74px" value='end:<c:out value="${schedule.to}"/>' readonly ></td>
-                            </tr>
-             </c:forEach>
-        </tbody>
-        <input type="hidden" name="days" id="daysId"/>
-        <input type="hidden" name="device" id="deviceId"/>
-
-    </table>
-    </form>
-  </div>
-
-  <div class="col-sm-3 col-sm-offset-0">Schedule Active Days
-      <form id="daySchedule">
+            <div class="row">
+                <div class="lead col-sm-8 col-sm-offset-3">Current Device Status</div>
+                <div class="col-sm-1 btn btn-default"><span class="glyphicon glyphicon-refresh ">  </span></div>
+            </div>
+            <div class="onoffswitch col-sm-offset-3">
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox"
+                       id="myonoffswitch" onchange="clickToggle(this.value)" checked>
+                <label class="onoffswitch-label" for="myonoffswitch">
+                    <span class="onoffswitch-inner"></span>
+                    <span class="onoffswitch-switch"></span>
+                </label>
+            </div>
             <br/>
-            <input type="checkbox" name="day" value="mo">Monday <br/>
-            <input type="checkbox" name="day" value="tu">Tuesday <br/>
-            <input type="checkbox" name="day" value="tu">Wednesday<br/>
-            <input type="checkbox" name="day" value="tu">Thursday<br/>
-            <input type="checkbox" name="day" value="tu">Friday<br/>
-            <input type="checkbox" name="day" value="tu">Saturday<br/>
-            <input type="checkbox" name="day" value="tu">Sunday<br/>
-        </form>
-  </div>
-<br/>
-<br/>
-<br/>
-  <button type="button" onclick="submitAllForm()" class="btn btn-default col-sm-offset-2">Update Schedule</button>
-  </div>
+            <%--<button class="btn btn-default col-sm-offset-5" id="myToggleButtonON" onclick="clickToggle(1)">ON</button>--%>
+            <%--<button class="btn btn-default col-sm-offset-5" id="myToggleButtonOFF"  onclick="clickToggle(0)">OFF</button>--%>
+
+
+            <div class="thumbnail thumbnail-no-hover lead col-sm-6">
+                Water flow Sensor
+                <br/>
+                <span class="glyphicon glyphicon-ok" style="margin-top: 7%"> Working</span>
+            </div>
+
+
+            <div class="thumbnail thumbnail-no-hover lead col-sm-6">
+                Operation Mode
+                <br/>
+                <select class="selectpicker span2" id="ModeSelectId"
+                        onchange="changeMode(this.selectedIndex)">
+                    <option>Normal Mode</option>
+                    <option>Alert Mode</option>
+                    <option>Intelligent Mode</option>
+                </select>
+
+            </div>
+            <br/>
+            <br/>
+        </div>
+
+        <div class="thumbnail col-sm-5 col-sm-offset-1">
+
+            <div class="row">
+                <div class="lead col-sm-8 col-sm-offset-3">Weather Sensors</div>
+                <div class="col-sm-1 btn btn-default"><span class="glyphicon glyphicon-refresh ">  </span></div>
+            </div>
+
+            <div class="col-sm-6" id='temp_meter'></div>
+            <div class="col-sm-6" id='moi_meter'></div>
+            <div class="lead col-sm-6" style="margin-left: 20px;">Temperature</div>
+            <div class="lead col-sm-5 "> Moisture Level</div>
+
+        </div>
+    </div>
+
+
+<div class="row">
+    <div class="thumbnail col-sm-12">
+
+        <h3 class="lead">Device Schedule</h3>
+
+
+        <div class="col-sm-7">
+
+            <div class="thumbnail" style="padding-top: 0;">
+
+                <div class="form-group ">
+                    <label class="control-label col-md-1" for="startTime">Start</label>
+
+                    <div class="col-sm-3">
+                        <div class="input-group clockpicker">
+                            <input type="text" id="startTime" class="form-control" value="09:30">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </span>
+                        </div>
+                    </div>
+                    <label class="control-label col-md-1" for="endTime">Stop</label>
+
+                    <div class="col-sm-3">
+                        <div class="input-group clockpicker">
+                            <input type="text" id="endTime" class="form-control" value="09:30">
+			                <span class="input-group-addon">
+				            <span class="glyphicon glyphicon-time"></span>
+			            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <button type="button" onclick="addSchedule()" class="btn btn-default col-sm-offset-2">Add this
+                            new
+                            interval
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <form id="timeSchedule" action="updateSchedule" method="post">
+                <table class="table table-hover col-sm-7" id="scheduleTable">
+                    <tbody>
+                    <c:forEach items="${schedules}" var="schedule">
+                        <tr>
+                            <td>
+                                <c:out value="${schedule.from}"/>
+                                <input type="hidden" name="start"
+                                       value='start:<c:out value="${schedule.from}"/>' readonly></td>
+                            <td>
+
+                            </td>
+                            <td>
+                                <c:out value="${schedule.from}"/>
+                                <input type="hidden" name="end"
+                                       value='end:<c:out value="${schedule.to}"/>' readonly>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                    <input type="hidden" name="days" id="daysId"/>
+                    <input type="hidden" name="device" id="deviceId"/>
+                </table>
+            </form>
+
+        </div>
+
+        <div class="thumbnail col-sm-3 col-sm-offset-2">Schedule Active Days
+            <form id="daySchedule">
+                <input type="checkbox" name="day" value="mo">Monday <br/>
+                <input type="checkbox" name="day" value="tu">Tuesday <br/>
+                <input type="checkbox" name="day" value="tu">Wednesday<br/>
+                <input type="checkbox" name="day" value="tu">Thursday<br/>
+                <input type="checkbox" name="day" value="tu">Friday<br/>
+                <input type="checkbox" name="day" value="tu">Saturday<br/>
+                <input type="checkbox" name="day" value="tu">Sunday<br/>
+            </form>
+        </div>
+
+        <button type="clear" class="btn btn-lg btn-default  col-sm-offset-3">Cancel and Reset Default</button>
+        <%--<button type="button" onclick="submitAllForm()" class="btn btn-lg btn-success">Update and Activate this--%>
+            <%--Schedule--%>
+        <%--</button>--%>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Button trigger modal -->
+        <button class="btn btn-lg btn-success" data-toggle="modal" data-target="#myModal">
+            Update and Activate this Schedule
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">Schedule Update</h4>
+                    </div>
+                    <div class="modal-body">
+                        Please wait while your schedule is being updated...
+                        <br/>
+                        Your scheudle is successfully updated. Do you want to send it to your device now?
+                        <br/>
+                        <br/>
+                        <br/>
+                        <button type="button" class="btn btn-default col-sm-offset-7" data-dismiss="modal">Not Now</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Send</button>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
 </div>
 </div>
 
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<<!-- Include all compiled plugins (below), or include individual files as needed -->
- <script type="text/javascript" src="resources/js/bootstrap/jquery-1.11.js"></script>
- <script type="text/javascript" src="resources/js/bootstrap/bootstrap.min.js"></script>
- <script type="text/javascript" src="resources/js/bootstrap/bootstrap-clockpicker.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script type="text/javascript" src="resources/js/bootstrap/jquery-1.11.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="resources/js/bootstrap/bootstrap-clockpicker.min.js"></script>
 
 <script type="text/javascript">
 $('.clockpicker').clockpicker()
