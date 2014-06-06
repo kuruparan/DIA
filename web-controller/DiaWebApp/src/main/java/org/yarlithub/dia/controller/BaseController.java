@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 //Maps the request after host:port/dia/
 public class BaseController {
 
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String welcome(ModelMap model) {
 
         model.addAttribute("message", "DIA Web Project + Spring 3 MVC - welcome()");
