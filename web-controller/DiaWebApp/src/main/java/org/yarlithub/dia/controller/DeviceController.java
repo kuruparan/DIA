@@ -116,6 +116,14 @@ public class DeviceController {
         return "gardenHome";
     }
 
+    @RequestMapping(value = "/changeOperationType", method = RequestMethod.GET)
+    public String changeOperationType(HttpServletRequest request) {
+        Device device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
+        device.setOperationType(Integer.parseInt(request.getParameter("operationType")));
+        DataLayer.updateDevice(device);
+        return "gardenHome";
+    }
+
     @RequestMapping(value = "/goToAddDevice", method = RequestMethod.GET)
     public String goTo() {
         return "addDevice";

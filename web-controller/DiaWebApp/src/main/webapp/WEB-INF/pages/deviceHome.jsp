@@ -80,6 +80,14 @@
       }else{
     	  document.getElementById("myonoffswitch").checked=false;
       }
+
+          var stss=${device.operationType};
+          if(stss=="1"){
+              document.getElementById("scheduleonoffswitch").value="Scheduled";
+          }else{
+              document.getElementById("scheduleonoffswitch").value="Manual";
+          }
+
       
       document.getElementById("ModeSelectId").selectedIndex = ${device.operationMode};
     }
@@ -98,6 +106,24 @@
         xhr.open('GET',url, true);
         xhr.send();
       }
+
+        function clickToggleSh(){
+            var url,xhr;
+
+            <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+            var elem=document.getElementById("scheduleonoffswitch");
+            if(elem.value=="Manual"){
+                url="${contextPath}/changeOperationType?deviceName=${device.deviceName}&operationType=1";
+                elem.value="Scheduled"
+            }else{
+                url="${contextPath}/changeOperationType?deviceName=${device.deviceName}&operationType=0";
+                elem.value="Manual"
+            }
+
+            xhr = new XMLHttpRequest();
+            xhr.open('GET',url, true);
+            xhr.send();
+        }
       
       function changeMode(x){
         var url;
@@ -269,9 +295,21 @@
 <div class="row">
     <div class="thumbnail col-sm-12">
 
-        <h3 class="lead">Device Schedule</h3>
 
 
+        <div class="row">
+            <div class="lead col-sm-3 col-sm-offset-3">Device Schedule</div>
+            <div class="onoffswitch col-sm-2 ">
+                <input id="scheduleonoffswitch" onclick="clickToggleSh()"
+                       class="btn branding-background" type="button">
+                </input>
+            </div>
+
+
+            <div class="col-sm-1 btn btn-default pull-right"><span class="glyphicon glyphicon-refresh ">  </span></div>
+
+
+        </div>
         <div class="col-sm-7">
 
             <div class="thumbnail" style="padding-top: 0;">
