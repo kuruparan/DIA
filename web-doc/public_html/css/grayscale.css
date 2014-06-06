@@ -147,7 +147,7 @@ a:focus {
 
 .text
 {
-text-shadow: 0 0 10px #F7FE2E;
+/*text-shadow: 0 0 10px #F7FE2E;*/
 font-size:50px;
 color:#FBFBEF;
 }
