@@ -42,6 +42,7 @@ public class DiaDBUtil {
                 device.setOperationType(resultSet.getInt("operation_type"));
                 device.setCurrentStatus(resultSet.getInt("current_status"));
                 device.setSchedule(resultSet.getString("schedule"));
+                device.setSensorData(resultSet.getString("sensor_data"));
             }
             resultSet.close();
             con.close();

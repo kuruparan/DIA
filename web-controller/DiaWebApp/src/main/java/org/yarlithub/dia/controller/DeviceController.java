@@ -8,6 +8,7 @@ import org.yarlithub.dia.repo.DataLayer;
 import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.repo.object.Schedule;
 import org.yarlithub.dia.sms.SmsRequestProcessor;
+import org.yarlithub.dia.util.Data;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -76,6 +77,8 @@ public class DeviceController {
             model.addAttribute("daySche", daySche);
         }
         model.addAttribute("device", device);
+        model.addAttribute("temperature", Data.temperatureValue(device.getSensorData()));
+        model.addAttribute("moisture", Data.moistureValue(device.getSensorData()));
         return "deviceHome";
     }
 

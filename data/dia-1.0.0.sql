@@ -72,7 +72,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `dia`;
-INSERT INTO `dia`.`device` (`id`, `device_name`, `pin`, `device_mask`, `garden_id`, `operation_mode`, `operation_type`, `schedule`, `current_status`, `sensor_data`) VALUES (1, 'initial-required', 'a;lksdfkjwoei#@%$!lskdfjcnjdalejlvj87327#', '99999999999', NULL, 0, 0, '', 0, NULL);
+INSERT INTO `dia`.`device` (`id`, `device_name`, `pin`, `device_mask`, `garden_id`, `operation_mode`, `operation_type`, `schedule`, `current_status`) VALUES (1, 'initial-required', 'a;lksdfkjwoei#@%$!lskdfjcnjdalejlvj87327#', '99999999999', NULL, 0, 0, '', 0);
 
 COMMIT;
 

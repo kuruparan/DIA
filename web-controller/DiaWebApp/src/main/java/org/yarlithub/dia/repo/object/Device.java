@@ -12,6 +12,9 @@ public class Device {
     private String deviceName;
     private String pin;
     private String deviceMask;
+    private String sensorData;
+
+
     private String schedule;
     private int gardenId;
     private int operationMode;
@@ -97,4 +100,8 @@ public class Device {
     public void setCurrentStatus(int currentStatus) {
         this.currentStatus = currentStatus;
     }
+
+    public String getSensorData() { return sensorData; }
+
+    public void setSensorData(String sensorData) { this.sensorData = sensorData; }
 }

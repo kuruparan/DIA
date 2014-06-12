@@ -150,7 +150,7 @@
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
-                ['\'C', 32]
+                ['\'C',<c:out value="${temperature}"/>]
 
             ]);
 
@@ -168,7 +168,7 @@
 
             var data1 = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
-                ['%', 80]
+                ['%',<c:out value="${moisture}"/>]
 
             ]);
 
