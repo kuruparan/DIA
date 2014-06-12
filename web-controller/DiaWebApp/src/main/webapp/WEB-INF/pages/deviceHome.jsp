@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dia Device Home</title>
+    <title>DIA Garden: <c:out value="${sessionScope.gardenName}"/>: <c:out value="${device.deviceName}"/></title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap.min.css">
@@ -195,7 +195,7 @@
 <!-- Fixed navbar -->
 <div id="dic_bubble" class="selection_bubble fontSize13 noSelect"
      style="z-index: 9999; border: 1px solid rgb(74, 174, 222); visibility: hidden;"></div>
-<div class="navbar navbar-default navbar-inverse  navbar-fixed-top" role="navigation">
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -208,14 +208,21 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Device Home</a></li>
+                <li><a href="${contextPath}/gardenHome"><c:out value="${sessionScope.gardenName}"/> home</a></li>
+                <li class="active"><a href="#"><c:out value="${device.deviceName}"/></a></li>
             </ul>
-             <ul class="nav navbar-nav navbar-right">
-                                        <li class="active"><a href="#"><c:out value="${sessionScope.gardenName}"/></a></li>
-                                        <li class="active"><a href="${contextPath}/signOut">Sign Out</a></li>
-                 <li><a href="#about">About</a></li>
-                 <li><a href="#contact">Contact</a></li>
-             </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome to <c:out
+                            value="${sessionScope.gardenName}"/> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="${contextPath}/signOut">Sign Out</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">About DIA</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
 
     </div>
