@@ -23,18 +23,21 @@ public class SmsRequestProcessor {
     public static void sendWebDeviceCommand(String deviceMask, String command) {
         MtSmsReq mtSmsReq = new MtSmsReq();
         mtSmsReq.setApplicationId(Property.getValue("APP_ID"));
-        mtSmsReq.setPassword("APP_PASS");
+        mtSmsReq.setPassword(Property.getValue("APP_PASS"));
         List<String> addressList = new ArrayList<String>();
         addressList.add(deviceMask);
         mtSmsReq.setDestinationAddresses(addressList);
         mtSmsReq.setMessage(command);
+        mtSmsReq.setVersion("1.0");
+        mtSmsReq.setDeliveryStatusRequest("1");
 
-
+        LOGGER.log(Level.INFO, "Web Request ready to send"+mtSmsReq);
         SmsRequestSender smsMtSender;
         try {
             smsMtSender = new SmsRequestSender(new URL(Property.getValue("sdp.sms.url")));
 
             MtSmsResp mtSmsResp = null;
+            LOGGER.log(Level.INFO, "Now sending web on ...");
             mtSmsResp = smsMtSender.sendSmsRequest(mtSmsReq);
         } catch (SdpException e) {
             LOGGER.log(Level.INFO, "Unexpected error occurred while sending SMS", e);

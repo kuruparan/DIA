@@ -17,9 +17,6 @@ public class BaseController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String welcome(ModelMap model) {
-
-        model.addAttribute("message", "DIA Web Project + Spring 3 MVC - welcome()");
-
         //Spring uses InternalResourceViewResolver and return back index.jsp
         return "login";
 

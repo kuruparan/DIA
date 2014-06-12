@@ -75,11 +75,37 @@ public class SmsHandler implements MoSmsListener {
                 //message received from user
                 deviceMtSms = DiaSmsUtil.createDeviceCommandMtSms(moSmsReq);
                 userMtSms = DiaSmsUtil.createUserReplyMtSms(moSmsReq);
-                if (message.equals("on") || message.equals("off")) {
+                if (message.equals("on")) {
                     // message is one of : on,off
                     deviceMtSms.setMessage(message);
                     deviceMtResp = smsRequestProcessor.sendCommand(smsMtSender, deviceMtSms);
                     if (StatusCodes.SuccessK.equals(deviceMtResp.getStatusCode())) {
+                        DeviceAccess deviceAccess = DataLayer.getDeviceAccessByMask(moSmsReq.getSourceAddress());
+                        Device device1=  DataLayer.getDeviceById(deviceAccess.getDeviceId());
+                        device1.setCurrentStatus(1);
+                        DataLayer.updateDevice(device1);
+                        LOGGER.info("MT SMS message successfully sent : " + deviceMtResp);
+                        userMtSms.setMessage(message + " command successfully sent to your device");
+                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
+                        //TODO:Dummy alert - remove after TadHack
+                        userMtSms.setMessage("Moisture level 80% temperature 29C. I prefer you can wait another 6 hours to water, send dia off if you decided to stop");
+                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
+                    } else {
+                        LOGGER.info("MT SMS message sending failed with status code [" + deviceMtResp.getStatusCode() + "] "
+                                + deviceMtResp.getStatusDetail());
+                        userMtSms.setMessage("There was a problem in sending your command, may be your device not active?");
+                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
+                    }
+
+                } else  if (message.equals("off")) {
+                    // message is one of : on,off
+                    deviceMtSms.setMessage(message);
+                    deviceMtResp = smsRequestProcessor.sendCommand(smsMtSender, deviceMtSms);
+                    if (StatusCodes.SuccessK.equals(deviceMtResp.getStatusCode())) {
+                        DeviceAccess deviceAccess = DataLayer.getDeviceAccessByMask(moSmsReq.getSourceAddress());
+                        Device device1=  DataLayer.getDeviceById(deviceAccess.getDeviceId());
+                        device1.setCurrentStatus(0);
+                        DataLayer.updateDevice(device1);
                         LOGGER.info("MT SMS message successfully sent : " + deviceMtResp);
                         userMtSms.setMessage(message + " command successfully sent to your device");
                         smsRequestProcessor.sendCommand(smsMtSender, userMtSms);

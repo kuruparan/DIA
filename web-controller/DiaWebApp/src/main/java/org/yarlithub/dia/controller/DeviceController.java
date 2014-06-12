@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.yarlithub.dia.repo.DataLayer;
 import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.repo.object.Schedule;
+import org.yarlithub.dia.sms.SmsRequestProcessor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +23,21 @@ import java.util.List;
 public class DeviceController {
     HttpSession session;
 
+    @RequestMapping(value = "/goToAddDevice", method = RequestMethod.GET)
+    public String goTo(HttpServletRequest request) {
+        session = request.getSession();
+        if(session.getAttribute("gardenId")!=null){
+            return "addDevice";
+        }
+        return "login";
+    }
+
     @RequestMapping(value = "/addDevice", method = RequestMethod.POST)
     public String addDevice(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
 
         Device device = new Device();
-        device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
-        if(device.getPin().equals(request.getParameter("pin"))){
+        device = DataLayer.getDeviceByName(request.getParameter("deviceName"));
+        if (device.getPin().equals(request.getParameter("pin"))) {
             session = request.getSession();
             device.setGardenId((Integer) session.getAttribute("gardenId"));
             DataLayer.updateDevice(device);
@@ -35,32 +45,33 @@ public class DeviceController {
             List<Device> devices = DataLayer.getDevicesByGardenId(device.getGardenId());
             model.addAttribute("devices", devices);
             return "gardenHome";
-        } else{
-            return "addDevice" ;
+        } else {
+            return "addDevice";
         }
 
 
     }
+
     @RequestMapping(value = "/deviceHome", method = RequestMethod.GET)
     public String goToDevice(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
 
         Device device;
-        device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
-        if(device.getSchedule()!=null){
-            String [] ss=device.getSchedule().split(";");
-            String [] temSS;
+        device = DataLayer.getDeviceByName(request.getParameter("deviceName"));
+        if (device.getSchedule() != null) {
+            String[] ss = device.getSchedule().split(";");
+            String[] temSS;
             Schedule schedule;
-            List<Schedule> schedules=new ArrayList<Schedule>();
-            for(String s:ss){
-                if(s.contains("-")){
-                    schedule=new Schedule();
-                    temSS=s.split("-");
+            List<Schedule> schedules = new ArrayList<Schedule>();
+            for (String s : ss) {
+                if (s.contains("-")) {
+                    schedule = new Schedule();
+                    temSS = s.split("-");
                     schedule.setFrom(temSS[0]);
                     schedule.setTo(temSS[1]);
                     schedules.add(schedule);
                 }
             }
-            char[] daySche=ss[0].toCharArray();
+            char[] daySche = ss[0].toCharArray();
             model.addAttribute("schedules", schedules);
             model.addAttribute("daySche", daySche);
         }
@@ -71,77 +82,59 @@ public class DeviceController {
     @RequestMapping(value = "/updateSchedule", method = RequestMethod.POST)
     public void updateSchedule(ModelMap model, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String ss1=request.getParameter("days");
-        String[] ss2=request.getParameterValues("start");
-        String[] ss3=request.getParameterValues("end");
-        String shedule=null;
+        String ss1 = request.getParameter("days");
+        String[] ss2 = request.getParameterValues("start");
+        String[] ss3 = request.getParameterValues("end");
+        String shedule = null;
 
-        if(ss1!=null){
-            ss1=ss1.replace("b","");
-           shedule=ss1;
+        if (ss1 != null) {
+            ss1 = ss1.replace("b", "");
+            shedule = ss1;
         }
-        if(ss2!=null&ss2!=null) {
+        if (ss2 != null & ss2 != null) {
             for (int n = 0; n < ss2.length; n++) {
-                ss2[n]=ss2[n].replace("start:","");
-                ss3[n]=ss3[n].replace("end:","");
-                shedule+=";"+ss2[n]+"-"+ss3[n];
+                ss2[n] = ss2[n].replace("start:", "");
+                ss3[n] = ss3[n].replace("end:", "");
+                shedule += ";" + ss2[n] + "-" + ss3[n];
             }
         }
-        Device device=DataLayer.getDeviceByName(request.getParameter("device"));
+        Device device = DataLayer.getDeviceByName(request.getParameter("device"));
         device.setSchedule(shedule);
         DataLayer.updateDevice(device);
-        request.setAttribute("deviceName",device.getDeviceName());
-        response.sendRedirect("/dia/deviceHome?deviceName="+device.getDeviceName());
+        request.setAttribute("deviceName", device.getDeviceName());
+        response.sendRedirect("/dia/deviceHome?deviceName=" + device.getDeviceName());
 
     }
 
     @RequestMapping(value = "/changeStatus", method = RequestMethod.GET)
     public String changeStatus(HttpServletRequest request) {
-    	String s1=request.getParameter("deviceName");
-        Device device=DataLayer.getDeviceByName(s1);
-        if("ON".equals(request.getParameter("status"))){
-           device.setCurrentStatus(1);
-        }else{
-           device.setCurrentStatus(0);
+        String s1 = request.getParameter("deviceName");
+        Device device = DataLayer.getDeviceByName(s1);
+        if ("ON".equals(request.getParameter("status"))) {
+            device.setCurrentStatus(1);
+            SmsRequestProcessor.sendWebDeviceCommand(device.getDeviceMask(), "on");
+        } else {
+            device.setCurrentStatus(0);
+            SmsRequestProcessor.sendWebDeviceCommand(device.getDeviceMask(), "off");
         }
         DataLayer.updateDevice(device);
         return "gardenHome";
     }
-    
+
     @RequestMapping(value = "/changeMode", method = RequestMethod.GET)
     public String changeMode(HttpServletRequest request) {
-        Device device=DataLayer.getDeviceByName(request.getParameter("deviceName"));    
-        device.setOperationMode(Integer.parseInt(request.getParameter("operationMode")));       
+        Device device = DataLayer.getDeviceByName(request.getParameter("deviceName"));
+        device.setOperationMode(Integer.parseInt(request.getParameter("operationMode")));
         DataLayer.updateDevice(device);
         return "gardenHome";
     }
 
     @RequestMapping(value = "/changeOperationType", method = RequestMethod.GET)
     public String changeOperationType(HttpServletRequest request) {
-        Device device=DataLayer.getDeviceByName(request.getParameter("deviceName"));
+        Device device = DataLayer.getDeviceByName(request.getParameter("deviceName"));
         device.setOperationType(Integer.parseInt(request.getParameter("operationType")));
         DataLayer.updateDevice(device);
         return "gardenHome";
     }
-
-    @RequestMapping(value = "/goToAddDevice", method = RequestMethod.GET)
-    public String goTo() {
-        return "addDevice";
-    }
-
-
-    /*public class DeviceController extends HttpServlet{
-    public void doPost(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException
-		{
-			Device device =new Device(); 
-			device.setGardenId(Integer.parseInt(request.getParameter("gardenId")));
-			device.setDeviceName(request.getParameter("deviveName"));
-			device.setPin(request.getParameter("pin"));
-			device.setId(DBExecutor.reserveNewDevice());
-			DBExecutor.updateNewDevice(device);
-			
-			RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/pages/gardenHome.jsp");
-			view.forward(request, response);
-		}*/
 
 }

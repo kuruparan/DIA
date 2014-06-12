@@ -9,6 +9,7 @@ import org.yarlithub.dia.repo.object.Garden;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/")
@@ -18,7 +19,7 @@ public class RegistrationController {
     HttpSession session;
 
     @RequestMapping(value = "/registerMe", method = RequestMethod.POST)
-    public String doLogin(HttpServletRequest request, HttpServletResponse response) {
+    public void doLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Garden gn = new Garden();
         gn.setGardenName(request.getParameter("gardenName"));
         gn.setPassword(request.getParameter("password"));
@@ -28,6 +29,6 @@ public class RegistrationController {
         session = request.getSession();
         session.setAttribute("gardenId", gn.getId());
         session.setAttribute("gardenName", gn.getGardenName());
-        return "gardenHome";
+        response.sendRedirect("/dia/gardenHome");
     }
 }

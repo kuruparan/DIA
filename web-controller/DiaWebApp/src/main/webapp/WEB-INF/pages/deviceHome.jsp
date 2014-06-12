@@ -11,7 +11,7 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap-clockpicker.min.css">
+<link rel="stylesheet" type="text/css" href="resources/css/bootstrap/bootstrap-clockpicker.css">
     <link rel="stylesheet" type="text/css" href="resources/css/toggle-switch.css">
     <link rel="stylesheet" type="text/css" href="resources/css/dia.css">
 
