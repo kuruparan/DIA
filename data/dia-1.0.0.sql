@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `dia`.`device` (
   `operation_type` INT NOT NULL DEFAULT 0,
   `schedule` VARCHAR(500) NULL,
   `current_status` INT NOT NULL DEFAULT 0,
+  `sensor_data` VARCHAR(100) NOT NULL DEFAULT 'T:0;M:0',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `device_name_UNIQUE` (`device_name` ASC),
   INDEX `fk_device_garden1_idx` (`garden_id` ASC),
@@ -66,10 +67,6 @@ CREATE TABLE IF NOT EXISTS `dia`.`device_access` (
 ENGINE = InnoDB;
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
 -- -----------------------------------------------------
 -- Data for table `dia`.`device`
 -- -----------------------------------------------------
@@ -79,3 +76,7 @@ INSERT INTO `dia`.`device` (`id`, `device_name`, `pin`, `device_mask`, `garden_i
 
 COMMIT;
 
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
