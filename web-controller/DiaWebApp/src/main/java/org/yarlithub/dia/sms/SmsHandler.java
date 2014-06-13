@@ -15,10 +15,9 @@ import hms.kite.samples.api.sms.messages.MtSmsResp;
 import org.yarlithub.dia.repo.DataLayer;
 import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.repo.object.DeviceAccess;
-import org.yarlithub.dia.util.Property;
+import org.yarlithub.dia.util.DiaCommonUtil;
+import org.yarlithub.dia.util.OperationType;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,19 +32,20 @@ public class SmsHandler implements MoSmsListener {
     @Override
     public void init() {
         LOGGER.info("Initiating SMS Handler");
-        smsRequestProcessor = new SmsRequestProcessor();
-        try {
-            smsMtSender = new SmsRequestSender(new URL(Property.getValue("sdp.sms.url")));
-        } catch (MalformedURLException e) {
-            LOGGER.info("MalformedURLException on initializing SmsHandler");
-        }
+
+//        try {
+//            smsMtSender = new SmsRequestSender(new URL(Property.getValue("sdp.sms.url")));
+//        } catch (MalformedURLException e) {
+//            LOGGER.info("MalformedURLException on initializing SmsHandler");
+//        }
     }
 
     @Override
     public void onReceivedSms(MoSmsReq moSmsReq) {
-        init();
+        LOGGER.info("DIA Sms Received : " + moSmsReq);
+
+        smsRequestProcessor = new SmsRequestProcessor();
         try {
-            LOGGER.info("Sms Received for generate request : " + moSmsReq);
             String message = DiaSmsUtil.removeDIA(moSmsReq.getMessage());
             MtSmsReq deviceMtSms, userMtSms;
             MtSmsResp deviceMtResp = null, userMtResp = null;
@@ -54,21 +54,65 @@ public class SmsHandler implements MoSmsListener {
                 //message received from device
                 Device device = DataLayer.getDeviceByMask(moSmsReq.getSourceAddress());
                 if (device.getId() > 0) {
-                    DeviceAccess deviceAccess = DataLayer.getDeviceAccessByDevice(String.valueOf(device.getId()));
+                    String deviceName = device.getDeviceName();
+                    List<DeviceAccess> deviceAccessList = DataLayer.getDeviceAccessListByDevice(String.valueOf(device.getId()));
 
                     List<String> addressList = new ArrayList<String>();
-                    addressList.add(deviceAccess.getUserMask());
+                    for (DeviceAccess deviceAccess : deviceAccessList) {
+                        addressList.add(deviceAccess.getUserMask());
+                    }
                     userMtSms = DiaSmsUtil.createUserReplyMtSms(moSmsReq);
                     userMtSms.setDestinationAddresses(addressList);
 
                     if (message.startsWith("dd on")) {
+                        device.setCurrentStatus(1);
+                        DataLayer.updateDevice(device);
                         message = message.substring(6);
-                        String temperature = message.substring(8,10);
-                        String moisture = message.substring(13);
+                        String temperature = String.valueOf(DiaCommonUtil.temperatureValue(message));
+                        String moisture = String.valueOf(DiaCommonUtil.moistureValue(message));
 
                         //TODO: send sensor data to DIA intellegent and get message
-                        userMtSms.setMessage("Device switched on, Moisture level " +moisture+"%, temperature "+temperature +" C." );
+                        userMtSms.setMessage(deviceName + " switched on, Moisture level " + moisture + "%, temperature " + temperature + " C.");
+                    } else if (message.startsWith("dd off")) {
+                        device.setCurrentStatus(0);
+                        DataLayer.updateDevice(device);
+                        message = message.substring(7);
+                        String temperature = String.valueOf(DiaCommonUtil.temperatureValue(message));
+                        String moisture = String.valueOf(DiaCommonUtil.moistureValue(message));
+
+                        //TODO: send sensor data to DIA intellegent and get message
+                        userMtSms.setMessage(deviceName + " switched off, Moisture level " + moisture + "%, temperature " + temperature + " C.");
+                    } else if (message.startsWith("dd shd on")) {
+                        message = message.substring(10);
+                        String temperature = String.valueOf(DiaCommonUtil.temperatureValue(message));
+                        String moisture = String.valueOf(DiaCommonUtil.moistureValue(message));
+
+                        //TODO: send sensor data to DIA intellegent and get message
+                        userMtSms.setMessage(deviceName + " switched on by your schedule, Moisture level " + moisture + "%, temperature " + temperature + " C.");
+                    } else if (message.startsWith("dd shd off")) {
+                        message = message.substring(11);
+                        String temperature = String.valueOf(DiaCommonUtil.temperatureValue(message));
+                        String moisture = String.valueOf(DiaCommonUtil.moistureValue(message));
+
+                        //TODO: send sensor data to DIA intellegent and get message
+                        userMtSms.setMessage(deviceName + " switched off by your schedule, Moisture level " + moisture + "%, temperature " + temperature + " C.");
+                    } else if (message.startsWith("dd shd T")) {
+                        userMtSms.setMessage("Schedule successfully loaded to " + deviceName);
+                    } else if (message.startsWith("dd rst")) {
+                        deviceMtSms = DiaSmsUtil.createDeviceReplyCommandMtSms(moSmsReq);
+                        if (device.getOperationMode() == OperationType.MANUAL) {
+                            deviceMtSms.setMessage("shd stop");
+                            DiaSmsUtil.sendCommand(smsMtSender, deviceMtSms);
+                            return;
+                        } else {
+                            String schedule = device.getSchedule();
+                            schedule = "shd " + String.valueOf(DiaCommonUtil.getCurrentDay()) + ";" + schedule;
+                            deviceMtSms.setMessage(schedule);
+                            DiaSmsUtil.sendCommand(smsMtSender, deviceMtSms);
+                            return;
+                        }
                     }
+                    DiaSmsUtil.sendCommand(smsMtSender, userMtSms);
                 }
 
             } else {
@@ -78,91 +122,83 @@ public class SmsHandler implements MoSmsListener {
                 if (message.equals("on")) {
                     // message is one of : on,off
                     deviceMtSms.setMessage(message);
-                    deviceMtResp = smsRequestProcessor.sendCommand(smsMtSender, deviceMtSms);
+                    LOGGER.info("Sending MT Sms message to device : " + deviceMtSms);
+                    deviceMtResp = DiaSmsUtil.sendCommand(smsMtSender, deviceMtSms);
                     if (StatusCodes.SuccessK.equals(deviceMtResp.getStatusCode())) {
                         DeviceAccess deviceAccess = DataLayer.getDeviceAccessByMask(moSmsReq.getSourceAddress());
-                        Device device1=  DataLayer.getDeviceById(deviceAccess.getDeviceId());
+                        Device device1 = DataLayer.getDeviceById(deviceAccess.getDeviceId());
                         device1.setCurrentStatus(1);
                         DataLayer.updateDevice(device1);
                         LOGGER.info("MT SMS message successfully sent : " + deviceMtResp);
-                        userMtSms.setMessage(message + " command successfully sent to your device");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
-                        //TODO:Dummy alert - remove after TadHack
-                        userMtSms.setMessage("Moisture level 80% temperature 29C. I prefer you can wait another 6 hours to water, send dia off if you decided to stop");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
                     } else {
                         LOGGER.info("MT SMS message sending failed with status code [" + deviceMtResp.getStatusCode() + "] "
                                 + deviceMtResp.getStatusDetail());
-                        userMtSms.setMessage("There was a problem in sending your command, may be your device not active?");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
                     }
 
-                } else  if (message.equals("off")) {
+                } else if (message.equals("off")) {
                     // message is one of : on,off
                     deviceMtSms.setMessage(message);
-                    deviceMtResp = smsRequestProcessor.sendCommand(smsMtSender, deviceMtSms);
+                    LOGGER.info("Sending MT Sms message to device : " + deviceMtSms);
+                    deviceMtResp = DiaSmsUtil.sendCommand(smsMtSender, deviceMtSms);
                     if (StatusCodes.SuccessK.equals(deviceMtResp.getStatusCode())) {
                         DeviceAccess deviceAccess = DataLayer.getDeviceAccessByMask(moSmsReq.getSourceAddress());
-                        Device device1=  DataLayer.getDeviceById(deviceAccess.getDeviceId());
+                        Device device1 = DataLayer.getDeviceById(deviceAccess.getDeviceId());
                         device1.setCurrentStatus(0);
                         DataLayer.updateDevice(device1);
                         LOGGER.info("MT SMS message successfully sent : " + deviceMtResp);
-                        userMtSms.setMessage(message + " command successfully sent to your device");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
-                        //TODO:Dummy alert - remove after TadHack
-                        userMtSms.setMessage("Moisture level 80% temperature 29C. I prefer you can wait another 6 hours to water, send dia off if you decided to stop");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
                     } else {
                         LOGGER.info("MT SMS message sending failed with status code [" + deviceMtResp.getStatusCode() + "] "
                                 + deviceMtResp.getStatusDetail());
-                        userMtSms.setMessage("There was a problem in sending your command, may be your device not active?");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
                     }
 
                 } else if (message.startsWith("1") || message.startsWith("0")) {
                     //this is a scheduling message
                     //TODO:validate shd command
                     //boolean isValidSchedule = DiaSmsUtil.validateShdString(message);
-                    deviceMtSms.setMessage("shd " + message);
-                    deviceMtResp = smsRequestProcessor.sendCommand(smsMtSender, deviceMtSms);
+                    //TODO: day should be device location based not server based.
+                    deviceMtSms.setMessage("shd " + DiaCommonUtil.getCurrentDay() + ";" + message);
+                    LOGGER.info("Sending MT Sms message to device : " + deviceMtSms);
+                    deviceMtResp = DiaSmsUtil.sendCommand(smsMtSender, deviceMtSms);
                     if (StatusCodes.SuccessK.equals(deviceMtResp.getStatusCode())) {
                         LOGGER.info("MT SMS message successfully sent : " + deviceMtResp);
-                        userMtSms.setMessage("Schedule " + message + " successfully sent to your device");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
                     } else {
                         LOGGER.info("MT SMS message sending failed with status code [" + deviceMtResp.getStatusCode() + "] "
                                 + deviceMtResp.getStatusDetail());
-                        userMtSms.setMessage("There was a problem in sending your command, may be your device not active?");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
                     }
+
+                } else if (message.startsWith("shd stop")) {
+                    deviceMtSms.setMessage("shd stop");
+                    DiaSmsUtil.sendCommand(smsMtSender, deviceMtSms);
 
                 } else if (message.startsWith("mod")) {
                     //modes of operation change
-                    if(String.valueOf(message.charAt(4)).equals("d")){
+                    //TODO:Mode change logic here
+                    if (String.valueOf(message.charAt(4)).equals("d")) {
                         userMtSms.setMessage("Changing your operation mode to default");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
-                    } else if(String.valueOf(message.charAt(4)).equals("a")){
+                        DiaSmsUtil.sendCommand(smsMtSender, userMtSms);
+                    } else if (String.valueOf(message.charAt(4)).equals("a")) {
                         userMtSms.setMessage("Changing your operation mode to alert, I'll check the situation and send you alerts");
-                        smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
+                        DiaSmsUtil.sendCommand(smsMtSender, userMtSms);
                     }
 
 
                 } else if (message.startsWith("rep")) {
                     //reporting change
-                    userMtSms.setMessage("Reporting facility is currently not available, I'll notify when it available.");
-                    smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
+                    //TODO:Rep change logic here
+                    userMtSms.setMessage("Reporting facility is currently not available, I'll notify when it become available.");
+                    DiaSmsUtil.sendCommand(smsMtSender, userMtSms);
                 } else {
                     //error in user message format.
                     userMtSms.setMessage("Sorry, I can't understand what you say, please retry");
-                    smsRequestProcessor.sendCommand(smsMtSender, userMtSms);
+                    DiaSmsUtil.sendCommand(smsMtSender, userMtSms);
                 }
             }
 
         } catch (Exception e) {
             LOGGER.log(Level.INFO, "Unexpected error occurred", e);
         }
-        smsMtSender=null;
-        smsRequestProcessor=null;
+        smsMtSender = null;
+        smsRequestProcessor = null;
 
     }
 

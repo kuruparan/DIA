@@ -46,13 +46,4 @@ public class SmsRequestProcessor {
         }
     }
 
-    public MtSmsResp sendCommand(SmsRequestSender smsMtSender, MtSmsReq mtSmsReq) {
-        MtSmsResp mtSmsResp = null;
-        try {
-            mtSmsResp = smsMtSender.sendSmsRequest(mtSmsReq);
-        } catch (SdpException e) {
-            LOGGER.log(Level.INFO, "Unexpected error occurred while sending SMS", e);
-        }
-        return mtSmsResp;
-    }
 }

@@ -1,7 +1,10 @@
 package org.yarlithub.dia.sms;
 
+import hms.kite.samples.api.SdpException;
+import hms.kite.samples.api.sms.SmsRequestSender;
 import hms.kite.samples.api.sms.messages.MoSmsReq;
 import hms.kite.samples.api.sms.messages.MtSmsReq;
+import hms.kite.samples.api.sms.messages.MtSmsResp;
 import org.yarlithub.dia.repo.DataLayer;
 import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.repo.object.DeviceAccess;
@@ -9,6 +12,7 @@ import org.yarlithub.dia.util.Property;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -16,7 +20,7 @@ import java.util.logging.Logger;
  * Created by jaykrish on 5/31/14.
  */
 public class DiaSmsUtil {
-    private final static Logger LOGGER = Logger.getLogger(SmsHandler.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(DiaSmsUtil.class.getName());
 
     public static String removeDIA(String message) {
         message = message.toLowerCase();
@@ -83,6 +87,21 @@ public class DiaSmsUtil {
         return mtSmsReq;
     }
 
+    /**
+     * Prepare mt sms for device from device request
+     *
+     * @param moSmsReq device moSms Request
+     * @return
+     */
+    public static MtSmsReq createDeviceReplyCommandMtSms(MoSmsReq moSmsReq) {
+        MtSmsReq mtSmsReq = createDiaMtSms(moSmsReq);
+        List<String> addressList = new ArrayList<String>();
+        addressList.add(moSmsReq.getSourceAddress());
+        LOGGER.info("Creating Device reply command SMS");
+        mtSmsReq.setDestinationAddresses(addressList);
+        return mtSmsReq;
+    }
+
     private static MtSmsReq createDiaMtSms(MoSmsReq moSmsReq) {
         MtSmsReq mtSmsReq = new MtSmsReq();
         mtSmsReq.setApplicationId(moSmsReq.getApplicationId());
@@ -99,4 +118,13 @@ public class DiaSmsUtil {
         return mtSmsReq;
     }
 
+    public static MtSmsResp sendCommand(SmsRequestSender smsMtSender, MtSmsReq mtSmsReq) {
+        MtSmsResp mtSmsResp = null;
+        try {
+            mtSmsResp = smsMtSender.sendSmsRequest(mtSmsReq);
+        } catch (SdpException e) {
+            LOGGER.log(Level.INFO, "Unexpected error occurred while sending SMS", e);
+        }
+        return mtSmsResp;
+    }
 }

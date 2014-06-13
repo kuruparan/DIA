@@ -8,16 +8,23 @@ import org.yarlithub.dia.util.OperationType;
  * Created by jaykrish on 5/25/14.
  */
 public class Device {
- private int id;
+    private int id;
     private String deviceName;
     private String pin;
     private String deviceMask;
     private String sensorData;
-
-
     private String schedule;
     private int gardenId;
     private int operationMode;
+    private int operationType;
+    private int currentStatus;
+
+    public Device() {
+        this.id = 0;
+        this.operationMode = OperationMode.DEFAULT;
+        this.operationType = OperationType.MANUAL;
+        currentStatus = 0;
+    }
 
     public String getSchedule() {
         return schedule;
@@ -25,16 +32,6 @@ public class Device {
 
     public void setSchedule(String schedule) {
         this.schedule = schedule;
-    }
-
-    private int operationType;
-    private int currentStatus;
-
-    public Device() {
-        this.id = 0;
-        this.operationMode= OperationMode.DEFAULT;
-        this.operationType= OperationType.MANUAL;
-        currentStatus = 0;
     }
 
     public int getId() {
@@ -101,7 +98,11 @@ public class Device {
         this.currentStatus = currentStatus;
     }
 
-    public String getSensorData() { return sensorData; }
+    public String getSensorData() {
+        return sensorData;
+    }
 
-    public void setSensorData(String sensorData) { this.sensorData = sensorData; }
+    public void setSensorData(String sensorData) {
+        this.sensorData = sensorData;
+    }
 }

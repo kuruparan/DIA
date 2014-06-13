@@ -75,6 +75,7 @@ public class DiaDBUtil {
                 device.setOperationType(resultSet.getInt("operation_type"));
                 device.setCurrentStatus(resultSet.getInt("current_status"));
                 device.setSchedule(resultSet.getString("schedule"));
+                device.setSensorData(resultSet.getString("sensor_data"));
                 deviceList.add(device);
             }
             resultSet.close();
@@ -109,6 +110,34 @@ public class DiaDBUtil {
             LOGGER.log(Level.SEVERE, "SQLException: " + e);
         }
         return deviceAccess;
+    }
+
+    /**
+     * Create DeviceAccess list by device.
+     *
+     * @param sql SQL String
+     * @return List of DeviceAccess if successful,else empty list.
+     */
+    public static List<DeviceAccess> getDeviceAccessList(String sql) {
+
+        List<DeviceAccess> deviceAccessList = new ArrayList<DeviceAccess>();
+        try {
+            Connection con = DiaDBConnector.getConnection();
+            ResultSet resultSet = sqlQuery(con, sql);
+            while (resultSet.next()) {
+                DeviceAccess deviceAccess =  new DeviceAccess();
+                deviceAccess.setId(resultSet.getInt("id"));
+                deviceAccess.setDeviceId(resultSet.getInt("device_id"));
+                deviceAccess.setUserMask(resultSet.getString("user_mask"));
+                deviceAccess.setUserName(resultSet.getString("user_name"));
+                deviceAccessList.add(deviceAccess);
+            }
+            resultSet.close();
+            con.close();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "SQLException: " + e);
+        }
+        return deviceAccessList;
     }
 
     /**

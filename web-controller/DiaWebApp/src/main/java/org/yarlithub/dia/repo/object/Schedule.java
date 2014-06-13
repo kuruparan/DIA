@@ -5,7 +5,7 @@ package org.yarlithub.dia.repo.object;
  */
 public class Schedule {
     private String from;
-    private  String to;
+    private String to;
 
     public String getFrom() {
         return from;

@@ -38,9 +38,9 @@ public class DataLayer {
         return DiaDBUtil.getDeviceAccess(sql);
     }
 
-    public static DeviceAccess getDeviceAccessByDevice(String device_id) {
+    public static List<DeviceAccess> getDeviceAccessListByDevice(String device_id) {
         String sql = String.format("SELECT * FROM device_access WHERE device_id=\"%s\"", device_id);
-        return DiaDBUtil.getDeviceAccess(sql);
+        return DiaDBUtil.getDeviceAccessList(sql);
     }
 
     public static Garden getGardenByName(String garden_name) {
