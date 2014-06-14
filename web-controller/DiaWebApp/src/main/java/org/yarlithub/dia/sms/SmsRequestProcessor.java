@@ -37,7 +37,7 @@ public class SmsRequestProcessor {
             smsMtSender = new SmsRequestSender(new URL(Property.getValue("sdp.sms.url")));
 
             MtSmsResp mtSmsResp = null;
-            LOGGER.log(Level.INFO, "Now sending web on ...");
+            LOGGER.log(Level.INFO, "Sending web command "+command);
             mtSmsResp = smsMtSender.sendSmsRequest(mtSmsReq);
         } catch (SdpException e) {
             LOGGER.log(Level.INFO, "Unexpected error occurred while sending SMS", e);

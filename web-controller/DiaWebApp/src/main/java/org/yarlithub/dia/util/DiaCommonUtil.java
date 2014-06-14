@@ -7,13 +7,15 @@ import java.util.Calendar;
  */
 public class DiaCommonUtil {
     public static int temperatureValue(String sensorData) {
+        sensorData=sensorData.toLowerCase();
         String[] tem = sensorData.split(";");
-        return Integer.parseInt(tem[0].replace("T:", ""));
+        return Integer.parseInt(tem[0].replace("t:", ""));
     }
 
     public static int moistureValue(String sensorData) {
+        sensorData=sensorData.toLowerCase();
         String[] tem = sensorData.split(";");
-        return Integer.parseInt(tem[1].replace("M:", ""));
+        return 100-Integer.parseInt(tem[1].replace("m:", ""));
     }
 
     /**

@@ -9,6 +9,7 @@ import org.yarlithub.dia.repo.object.Device;
 import org.yarlithub.dia.repo.object.Schedule;
 import org.yarlithub.dia.sms.SmsRequestProcessor;
 import org.yarlithub.dia.util.DiaCommonUtil;
+import sun.print.resources.serviceui_zh_CN;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -88,22 +89,24 @@ public class DeviceController {
         String ss1 = request.getParameter("days");
         String[] ss2 = request.getParameterValues("start");
         String[] ss3 = request.getParameterValues("end");
-        String shedule = null;
+        String schedule = null;
 
         if (ss1 != null) {
             ss1 = ss1.replace("b", "");
-            shedule = ss1;
+            schedule = ss1;
         }
         if (ss2 != null & ss2 != null) {
             for (int n = 0; n < ss2.length; n++) {
                 ss2[n] = ss2[n].replace("start:", "");
                 ss3[n] = ss3[n].replace("end:", "");
-                shedule += ";" + ss2[n] + "-" + ss3[n];
+                schedule += ";" + ss2[n] + "-" + ss3[n];
             }
         }
         Device device = DataLayer.getDeviceByName(request.getParameter("device"));
-        device.setSchedule(shedule);
+        device.setSchedule(schedule);
         DataLayer.updateDevice(device);
+        SmsRequestProcessor.sendWebDeviceCommand(device.getDeviceMask(), "shd "+String.valueOf(DiaCommonUtil.getCurrentDay())+";"+schedule);
+
         request.setAttribute("deviceName", device.getDeviceName());
         response.sendRedirect("/dia/deviceHome?deviceName=" + device.getDeviceName());
 

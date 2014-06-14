@@ -23,6 +23,7 @@ public class Device {
         this.id = 0;
         this.operationMode = OperationMode.DEFAULT;
         this.operationType = OperationType.MANUAL;
+        this.sensorData = "T:0;M:0";
         currentStatus = 0;
     }
 

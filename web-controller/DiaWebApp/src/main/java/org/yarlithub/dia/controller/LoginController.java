@@ -20,7 +20,7 @@ public class LoginController {
     HttpSession session;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String doLogin(ModelMap model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doLogin(ModelMap model, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Garden gn = new Garden();
         gn = DataLayer.getGardenByName(request.getParameter("gardenName"));
         if (gn.getPassword().equals(request.getParameter("password"))) {
@@ -28,9 +28,8 @@ public class LoginController {
             session.setAttribute("gardenId", gn.getId());
             session.setAttribute("gardenName", gn.getGardenName());
             response.sendRedirect("/dia/gardenHome");
-            return "";
         } else {
-            return "login";
+//            return "login";
         }
     }
 

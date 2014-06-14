@@ -120,8 +120,15 @@ public class DiaSmsUtil {
 
     public static MtSmsResp sendCommand(SmsRequestSender smsMtSender, MtSmsReq mtSmsReq) {
         MtSmsResp mtSmsResp = null;
+        List<String> addressList = mtSmsReq.getDestinationAddresses();
         try {
-            mtSmsResp = smsMtSender.sendSmsRequest(mtSmsReq);
+            //TODO:Multiple destination address is not-working/too-late, this is a workaround.
+            for (String address : addressList) {
+                List<String> addressListToSend = new ArrayList<>();
+                addressListToSend.add(address);
+                mtSmsReq.setDestinationAddresses(addressListToSend);
+                mtSmsResp = smsMtSender.sendSmsRequest(mtSmsReq);
+            }
         } catch (SdpException e) {
             LOGGER.log(Level.INFO, "Unexpected error occurred while sending SMS", e);
         }
