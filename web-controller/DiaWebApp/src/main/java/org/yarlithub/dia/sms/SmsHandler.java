@@ -124,7 +124,7 @@ public class SmsHandler implements MoSmsListener {
                         userMtSms.setMessage("Schedule successfully loaded to " + deviceName);
                     } else if (message.startsWith("dd rst")) {
                         deviceMtSms = DiaSmsUtil.createDeviceReplyCommandMtSms(moSmsReq);
-                        if (device.getOperationMode() == OperationType.MANUAL) {
+                        if (device.getOperationType() == OperationType.MANUAL) {
                             deviceMtSms.setMessage("shd stop");
                             DiaSmsUtil.sendCommand(smsMtSender, deviceMtSms);
                             userMtSms.setMessage("There was a power down and up now, restarting "+deviceName+" with manual mode");
@@ -135,7 +135,7 @@ public class SmsHandler implements MoSmsListener {
                             schedule = "shd " + String.valueOf(DiaCommonUtil.getCurrentDay()) + ";" + schedule;
                             deviceMtSms.setMessage(schedule);
                             DiaSmsUtil.sendCommand(smsMtSender, deviceMtSms);
-                            userMtSms.setMessage("There was a power down and up now, restarting "+deviceName+" with scheduled mode. Schedule loaded back successfully");
+                            userMtSms.setMessage("There was a power down and up now, restarting "+deviceName+" with scheduled mode. Calling schedule back");
                             DiaSmsUtil.sendCommand(smsMtSender, userMtSms);
                             return;
                         }
